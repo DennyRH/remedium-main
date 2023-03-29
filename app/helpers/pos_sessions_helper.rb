@@ -1,0 +1,2 @@
+module PosSessionsHelper
+end

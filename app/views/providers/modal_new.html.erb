@@ -1,0 +1,14 @@
+<%= turbo_frame_tag "modal_new_provider" do %>
+  <div id="myModal2" class="modal2">
+    <div class="modal-content2">
+      <div class="row justify-content-center">
+        <div class="col-12">
+          <h5 class="mb-5 mt-2 text-center">
+            Crear Proveedor
+          </h5>
+          <%= render partial: 'shared/customers/form', locals: {kind: 'provider', obj: @provider, action: 'create'} %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

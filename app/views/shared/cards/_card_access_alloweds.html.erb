@@ -1,0 +1,32 @@
+<div class="row">
+  <% access_alloweds.each do |obj| %>
+    <div class="col-6 col-md-4 col-lg-3 card-warehouse-container">
+      <div class="card">
+        <img
+          <% # change the url with the image url the warehouse %>
+          src="<%= asset_path("warehouse.png") %>"
+          class="card-img-top"
+          alt="warehouse"
+        />
+        <div class="card-body">
+          <h5 class="card-title"><%= obj.warehouse.name %></h5>
+          <p class="card-text">
+            <%=
+              obj.warehouse.warehouse_detail ?
+              obj.warehouse.warehouse_detail.address : "Sin direccion"
+            %>
+          </p>
+          <%=
+            link_to users_admin_access_allowed_path(obj.user, obj),
+              data: {
+                turbo_method: :delete,
+                turbo_confirm: "Estas seguro de Eliminar el Acceso al usuario #{obj.user.full_name} a la Sucursal #{obj.warehouse.name}?"
+              } do
+          %>
+            <i class="fa fa-trash" color="black" aria-hidden="true"></i>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

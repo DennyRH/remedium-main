@@ -1,0 +1,25 @@
+.account-show-container {
+
+}
+
+.account-details {
+  padding-left: 35px;
+  height: 80%;
+  width: 600px;
+  background: #f2f2f2;
+  border-radius: 20px;
+  box-shadow: 0 0 20px 8px #1d1b1b;
+}
+
+.contenido {
+  display: flex;
+  justify-content: space-between;
+}
+
+.contenido p {
+  margin: 0;
+}
+
+.contenido h5 {
+  margin: 0;
+}

@@ -1,0 +1,54 @@
+<section class="app-papper show-user-container row">
+  <div class="col-12 col-md-6 col-lg-5">
+    <img src="<%= asset_path("user.jpg") %>" class="warehouse-show-img" alt="customer">
+  </div>
+  <div class="show-user-info col-12 col-md-6 col-lg-7">
+    <div class="contenido">
+      <h5>Tipo de Cliente:  </h5>
+      <p><%= @customer.type_customer %></p>
+    </div>
+    <div class="contenido">
+      <h5>Nombre: </h5>
+      <p><%= @customer.name %> <%= @customer.last_name %></p>
+    </div>
+    <div class="contenido">
+      <h5>NIT: </h5>
+      <p><%= @customer.nit %></p>
+    </div>
+    <div class="contenido">
+      <h5>Empresa: </h5>
+      <p><%= @customer.company_name %></p>
+    </div>
+    <div class="contenido">
+      <h5>Razón Social: </h5>
+      <p><%= @customer.social_reason %></p>
+    </div>
+    <div class="contenido">
+      <h5>CI: </h5>
+      <p><%= @customer.ci  %></p>
+    </div>
+    <div class="contenido">
+      <h5>Correo eletrónico: </h5>
+      <p><%= @customer.email  %></p>
+    </div>
+    <div class="contenido">
+      <h5>Celular: </h5>
+      <p><%= @customer.phone %></p>
+    </div>
+    <div class="contenido">
+      <h5>Estado: </h5>
+      <p><%= @customer.status  %></p>
+    </div>
+    <div class="contenido">
+      <h5>Fecha de creacion:  </h5>
+      <p><%= @customer.created_at.localtime.strftime("%Y-%m-%d %H:%M") %></p>
+    </div>
+    <div class="contenido">
+      <h5>Fecha de actualizacion: </h5>
+      <p><%= @customer.updated_at.localtime.strftime("%Y-%m-%d %H:%M") %></p>
+    </div>
+  </div>
+  <div class="col-12 mt-3">
+    <%= link_to "Editar", edit_customer_path(@customer), class: "btn btn-primary" %>
+  </div>
+</section>

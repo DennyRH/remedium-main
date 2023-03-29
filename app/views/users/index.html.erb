@@ -1,0 +1,39 @@
+<section class="app-papper row justify-content-between" data-controller="users">
+  <div class="col-6 col-md-5 mb-4">
+    <%= form_with url: search_users_users_admin_index_path,
+        method: :post, class: "purchase-search-products-form",
+        data: { users_target: "formSearchUsers" } do |form|
+    %>
+      <%= form.label "Buscar Usuario" %>
+      <%=
+        form.search_field :search_users, id: "search-input",
+          class: "form-control purchase-search-input",
+          data: {
+            action: "input->users#searchUsers",
+            users_target: "inputSearchUsers"
+          }
+      %>
+    <% end %>
+  </div>
+  <div class="col-6 col-md-4 col-lg-3">
+    <%= form_with url: users_admin_index_path,
+        method: :get, class: "purchase-search-products-form",
+        data: { users_target: "formSearchUsersFilter" } do |form|
+    %>
+      <%= form.label "Filtrar por:" %>
+      <%=
+        form.select :type_filter,  options_for_select(@filter_users, params[:type_filter]),
+          { include_blank: 'Seleccionar' },
+          class: "form-control purchase-search-input",
+          data: { action: "change->users#sendRequestUserFilter" }
+      %>
+    <% end %>
+  </div>
+  <div class="col-6 col-md-5 col-lg-3 my-4">
+    <%= link_to "Crear Empleado", new_users_admin_path, class: "btn btn-primary" %>
+  </div>
+  <div class="col-12" id="search_results_users_index">
+    <%= render partial: 'shared/cards/card_user', locals: { users: @users} %>
+    <%= render partial: 'shared/pagination', locals: { records_pagination: @users } %>
+  </div>
+</section>

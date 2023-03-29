@@ -1,0 +1,41 @@
+<section class="app-papper show-user-container row">
+  <div class="col-12 col-md-5 col-lg-5">
+    <img src="<%= asset_path("user.jpg") %>" class="warehouse-show-img" alt="user">
+  </div>
+  <div class="show-user-info col-12 col-md-6 col-lg-6">
+    <div class="contenido">
+      <h5>Nombre: </h5>
+      <p><%= @user.name %> <%= @user.last_name %></p>
+    </div>
+    <div class="contenido">
+      <h5>CI: </h5>
+      <p><%= @user.ci %></p>
+    </div>
+    <div class="contenido">
+      <h5>Correo eletrónico: </h5>
+      <p><%= @user.email %></p>
+    </div>
+    <div class="contenido">
+      <h5>Rol: </h5>
+      <p><%= @user.role.name_es || @user.role.name %></p>
+    </div>
+  </div>
+  <% if policy(User).edit? %>
+    <div class="col-12 mt-3">
+      <%= link_to "Editar", edit_users_admin_path(@user), class: "btn btn-outline-primary" %>
+    </div>
+  <% end %>
+</section>
+<section class="app-papper show-user-access-alloweds row my-4">
+  <div class="col-12">
+    <h3 class="mb-4">Sucursales Asignadas</h3>
+    <div class="mb-1">
+      <%= render partial: 'shared/cards/card_access_alloweds',
+            locals: { user: @user, access_alloweds: @access_alloweds } %>
+    </div>
+    <% if policy(AccessAllowed).create? %>
+      <%= link_to "Asignar Nueva Sucursal", new_users_admin_access_allowed_path(@user.id),
+            class: "btn btn-primary mt-4" %>
+    <% end %>
+  </div>
+</section>

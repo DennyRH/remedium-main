@@ -1,0 +1,43 @@
+<section class="mb-3">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-7 px-4 app-papper">
+      <h5 class="mb-4 mt-3 text-center">
+        Crear Proveedor
+      </h5>
+      <%= bootstrap_form_with(model:@customer) do |f| %>
+        <%= render partial: 'shared/forms/errors', locals: { object: @customer } %>
+        <%= f.hidden_field :type_customer, value: "Proveedor" %>
+        <div class="row" >
+          <div class="col-6 col-md-6">
+            <%= f.text_field :name, label: "Nombre"%>
+          </div>
+          <div class="col-6 col-md-6">
+            <%= f.text_field :last_name, label: "Apellido" %>
+          </div>
+          <div class="col-6 col-md-6">
+            <%= f.text_field :company_name, label: "Compañia" %>
+          </div>
+          <div class="col-6 col-md-6">
+            <%= f.text_field :social_reason, label: "Razon Social" %>
+          </div>
+          <div class="col-12">
+            <%= f.email_field :email, label: "Correo Electrónico" %>
+          </div>
+          <div class="col-6 col-md-4">
+            <%= f.text_field :ci, label: "CI" %>
+          </div>
+          <div class="col-6 col-md-4">
+            <%= f.text_field :phone, label: "Telefono" %>
+          </div>
+          <div class="col-12 col-md-4">
+            <%= f.text_field :nit, label: "NIT" %>
+          </div>
+        </div>
+        <div class="col-12 mb-3 mt-3">
+          <%= f.submit "Crear Proveedor",
+              class: "btn btn-primary" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>

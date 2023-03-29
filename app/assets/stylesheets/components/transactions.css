@@ -1,0 +1,91 @@
+.search_results {
+  width: 100%;
+  padding: 0.2rem 1rem;
+}
+
+.search_results-customers {
+  padding: 0;
+  margin: 0;
+  line-height: 1.4rem;
+  color: gray;
+  transition: 0.1s;
+  cursor: pointer;
+}
+
+.search_results-customers:hover {
+  transition: 0.1s;
+  border-radius: 0.2rem;
+  background-color: gray;
+  color: white;
+}
+
+.search-results-sales {
+  padding: 0;
+  margin: 0;
+  line-height: 1.4rem;
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+.search-results-sales:hover {
+  transition: 0.1s;
+  border-radius: 0.2rem;
+  background-color: rgb(235, 235, 235);
+}
+
+.search-results-symbol {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: black;
+  margin-left: 5px;
+}
+
+.minimum-stock {
+  background-color: yellow;
+}
+
+.without-stock {
+  background-color: red;
+}
+
+.available-stock {
+  background-color: green;
+}
+
+.purchase-item-transactions-input-container {
+  width: 35%;
+  display: inline-block;
+}
+.purchase-item-transactions-submit-container {
+  width: 20%;
+  display: inline-block;
+}
+
+.purchases-button-create-product {
+  width: 100%;
+  margin-top: 1.5rem;
+}
+
+.purchase-align-button-transaktion-new {
+  margin-top: 2rem;
+}
+
+.sale-align-button-item-transaktions-add {
+  margin-top: 1.3rem;
+}
+
+.text-decoration-none {
+  text-decoration: none;
+}
+
+.transaktion-annulled {
+  background-color: rgb(255, 178, 178);
+}
+
+@media only screen and (min-width: 1200px) {
+  .purchase-search-input {
+    width: 100%;
+  }
+}

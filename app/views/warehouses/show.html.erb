@@ -1,0 +1,36 @@
+<section class="app-papper warehouse-show-container row">
+  <div class="col-12 col-md-6 col-lg-5">
+    <img src="<%= asset_path("warehouse.png") %>" alt="warehouse" class="warehouse-show-img">
+  </div>
+  <div class="warehouse-show-info col-12 col-md-6 col-lg-6">
+    <div class="contenido">
+      <h5>Nombre: </h5>
+      <p><%= @warehouse.name  %></p>
+    </div>
+
+    <% if @warehouse.warehouse_detail %>
+    <div class="contenido">
+      <h5>NIT:  </h5>
+      <p><%= @warehouse.warehouse_detail.nit %></p>
+    </div>
+    <div class="contenido">
+      <h5>Municipio: </h5>
+      <p><%= @warehouse.warehouse_detail.municipality %></p>
+    </div>
+    <div class="contenido">
+      <h5>Dirección:  </h5>
+      <p><%= @warehouse.warehouse_detail.address %></p>
+    </div>
+    <div class="contenido">
+      <h5>Código de Sucursal: </h5>
+      <p><%= @warehouse.warehouse_detail.branch_code %></p>
+    </div>
+    <% end %>
+    <% if policy(Warehouse).edit? %>
+      <%= link_to "Editar", edit_warehouse_path(@warehouse),
+            class: "btn btn-outline-primary" %>
+    <% end %>
+    <%= link_to "Inventario", warehouse_items_path(@warehouse),
+          class: "btn btn-primary" %>
+  </div>
+</section>

@@ -1,0 +1,9 @@
+<section class="app-papper my-2">
+  <h5><%= t('payment.pending.title') %></h5>
+  <%= render partial: 'shared/tables/table_payments', locals: { payments: @pending_payments } %>
+  <%= render partial: 'shared/pagination', locals: { records_pagination: @pending_payments } %>
+
+  <h5><%= t('payment.completed.title') %></h5>
+  <%= render partial: 'shared/tables/table_payments', locals: { payments: @completed_payments } %>
+  <%= render partial: 'shared/pagination', locals: { records_pagination: @completed_payments } %>
+</section>

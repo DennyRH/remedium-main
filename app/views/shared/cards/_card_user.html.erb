@@ -1,0 +1,21 @@
+<div class="row">
+  <% users.each do |obj| %>
+    <div class="col-6 col-md-4 col-lg-3 card-warehouse-container mt-3">
+      <%= link_to "/users_admin/#{obj.id}", class: "card-warehouse-text-decoration-none" do %>
+        <div class="card">
+          <img
+            src="<%= asset_path("user.jpg") %>"
+            class="card-img-top"
+            alt="user"
+          />
+          <div class="card-body">
+            <h5 class="card-title"><%= obj.name %> <%= obj.last_name %></h5>
+            <p class="card-text">
+              <%= obj.role.name_es || obj.role.name %>
+            </p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,278 @@
+<section class="purchases-container" data-controller="purchase">
+  <div class="app-papper justify-content-center mb-3">
+    <div class="purchase-search-products row justify-content-between">
+      <div class="col-12">
+          <h5 class="">
+            Proveedor
+          </h5>
+        <%= form_with url: providers_path, method: :post,
+              class: "purchase-search-products-form",
+              data: { purchase_target: "formSearchProvider" } do |form|
+        %>
+          <%= form.hidden_field :pos_session_id, value: @pos_session.id,
+                data: { purchase_target: "posSessionIdPurchase" } %>
+          <div class="row justify-content-between">
+            
+            <div class="col-6 col-md-4">
+              <%= form.label "NIT/CI" %>
+              <%=
+                form.number_field :document_number, id: "search-input",
+                  class: "form-control purchase-search-input",
+                  data: {
+                    action: "input->purchase#searchProvider",
+                    purchase_target: "inputSearchProvider"
+                  }
+              %>
+            </div>
+            
+            <div class="col-6 col-md-4">
+              <%= form.label "Razón Social" %>
+              <%=
+                form.text_field :name, id: "search-input",
+                  class: "form-control purchase-search-input",
+                  data: { purchase_target: "socialReasonPurchaseProvider" }
+              %>
+            </div>
+
+            <div class="col-6 col-md-4">
+              <%= form.label "Correo eletrónico" %>
+              <%=
+                form.text_field :email, id: "search-input",
+                  class: "form-control purchase-search-input",
+                  data: { purchase_target: "emailPurchaseProvider" }
+              %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3">
+        <%=
+          link_to "Crear Proveedor", modal_new_providers_path,
+            class: "btn btn-outline-primary purchases-button-create-product",
+            data: { turbo_frame: "modal_new_provider" }
+        %>
+      </div>
+    </div>
+  </div>
+  <div class="app-papper justify-content-center">
+    <div class="purchase-search-products row justify-content-between">
+      <div class="col-12 col-md-4">
+        <%=
+          form_with url: search_pos_session_transaktions_path(@pos_session),
+          method: :post, class: "purchase-search-products-form",
+          data: { purchase_target: "formSearch" } do |form|
+        %>
+          <%= form.hidden_field :customer_id, data: { purchase_target: "providerId" } %>
+          <%= form.label "Buscar producto del proveedor:" %>
+          <span data-purchase-target="providerName"></span>
+          <%=
+            form.search_field :search, id: "search-input",
+              class: "form-control purchase-search-input",
+              data: {
+                action: "input->purchase#searchProduct",
+                purchase_target: "inputSearchProduct"
+              }
+          %>
+        <% end %>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3">
+        <%= link_to "Crear Producto", pos_session_modal_create_product_path(@pos_session),
+            class: "btn btn-outline-primary purchases-button-create-product",
+            data: { turbo_frame: "modal_create_product" } %>
+      </div>
+      <div
+        data-purchase-target="searchResults"
+        class="col-12 search_results"
+        id="search_results_purchase"
+      ></div>
+    </div>
+    <div class="table-responsive my-4">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th scope="col" class="min-width-6">Descripción</th>
+            <th scope="col">Unidades Caja</th>
+            <th scope="col">Costo Unitario</th>
+            <th scope="col">Costo Caja</th>
+            <th scope="col">Stock Min.</th>
+            <th scope="col">Stock Max.</th>
+            <th scope="col">Total Stock</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td data-purchase-target="productDescription" class="min-width-6" scope="row"></td>
+            <td data-purchase-target="unitPackage"></td>
+            <td data-purchase-target="costUnit"></td>
+            <td data-purchase-target="costPackage"></td>
+            <td data-purchase-target="minStock"></td>
+            <td data-purchase-target="maxStock"></td>
+            <td data-purchase-target="totalStock"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="purchase-item-transactions-form mt-4">
+      <%= form_with url: item_transactions_pos_session_transaktions_path(@pos_session),
+          data: { purchase_target: "formPurchaseItemTransaktionAdd" },
+          method: :post do |form| %>
+        <input type="hidden" data-purchase-target="subtotalProduct">
+        <input type="hidden" data-purchase-target="qtyPerPackage">
+        <%= form.hidden_field :purchase, value: 'true' %>
+        <%= form.hidden_field :product_id, data: { purchase_target: "productId" } %>
+        <%= form.hidden_field :qty_unit, data: { purchase_target: "qtyUnitPurchase" } %>
+        <%= form.hidden_field :item_id, data: { purchase_target: "itemId" } %>
+        <div class="row">
+          <div class="col-6 col-lg-3">
+            <%= form.label "Unidades" %>
+            <%=
+              form.number_field :unit_total,
+                class: "form-control purchase-item-transactions-input",
+                data: {
+                  action: "input->purchase#sumSubtotalForUnits",
+                  purchase_target: "unitTotalPurchase"
+                }
+            %>
+          </div>
+          <div class="col-6 col-lg-4 col-xl-3">
+            <%= form.label "Cantidad Paq./Caja" %>
+            <%=
+              form.number_field :qty_package,
+                class: "form-control purchase-item-transactions-input",
+                data: {
+                  action: "input->purchase#sumSubtotalForPackage",
+                  purchase_target: "qtyPackagePurchase"
+                }
+            %>
+          </div>
+          <div class="col-6 col-lg-3">
+            <%= form.label :subtotal %>
+            <%= form.hidden_field :sub_total, step: '0.01',
+                class: "form-control", data: { purchase_target: "subtotal" } %>
+            <div>
+              <p class="fw-bold h5 mt-2 d-inline-block" data-purchase-target="subtotalSee">
+                0
+              </p>
+              <p class="fw-bold h5 mt-2 d-inline-block">
+                <%= @pos_session.type_of_currency %>
+              </p>
+            </div>
+          </div>
+          <div class="col-6 col-lg-2">
+            <button
+              type="button" data-action="click->purchase#addItemTransaktionAndReset"
+              class="btn btn-outline-primary sale-align-button-item-transaktions-add"
+            >
+              Agregar
+            </button>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <div class="app-papper my-3" id="item_transactions_purchase">
+    <%= render partial: "shared/tables/table_items_added_purchases",
+        locals: { item_transactions: session[:item_transactions_purchase] } %>
+  </div>
+  <div class="app-papper my-3">
+    <div class="mb-4">
+      <div class="d-inline-block">
+        <input
+          type="checkbox" class="form-check-input my-2" value="Purchases"
+          data-purchase-target="checkboxPurchases" checked
+          data-action="change->purchase#setTypePurchasesSelected"
+        >
+        <label for="checkbox" class="form-check-label my-1">
+          Compra al Contado
+        </label>
+      </div>
+      <div class="d-inline-block mx-4">
+        <input
+          type="checkbox" class="form-check-input my-2"
+          data-purchase-target="checkboxPurchasesCredit" value="Purchases Credit"
+          data-action="change->purchase#setTypePurchasesCreditSelected"
+        >
+        <label for="checkbox" class="form-check-label my-1">
+          Compra al Credito
+        </label>
+      </div>
+    </div>
+    <%= bootstrap_form_for([@pos_session, @purchase]) do |f| %>
+      <%= f.hidden_field :type_transaktion, value: "Purchases",
+          data: { purchase_target: "typeTransaktionPurchase" } %>
+      <%= f.hidden_field :customer_received_money_id,
+            data: { purchase_target: "customerReceivedMoneyId" } %>
+      <%= f.hidden_field :total, data: { purchase_target: "totalPurchase" } %>
+      <%= f.hidden_field :status, value: "active", data: { purchase_target: "statusPurchase" } %>
+      <div class="row justify-content-start">
+        <div class="col-6 col-md-4">
+          <%= f.text_area :description, rows: 1,
+                label: t('forms.models.transaktion.labels.description') %>
+        </div>
+        <div class="col-6 col-md-4 d-none" id="purchases-credit-date">
+          <%= f.date_field :date_of_payment,
+                data: { purchase_target: "dateOfPaymentPurchase" },
+                label: t('forms.models.transaktion.labels.date_of_payment') %>
+        </div>
+        <div class="col-6 col-md-4">
+          <%= f.number_field :invoice_number,
+                label: t('forms.models.transaktion.labels.invoice_number') %>
+        </div>
+        <div class="col-6 col-md-4">
+          <%= f.text_field :receipt_number,
+                label: t('forms.models.transaktion.labels.receipt_number') %>
+        </div>
+        <div class="col-6 col-md-4 purchases-selector-hidden-toggle">
+          <%=
+            f.number_field :money_paid, step: '0.01',
+              label: t('forms.models.transaktion.labels.money_paid'),
+              data: {
+                purchase_target: "moneyPaidPurchases",
+                action: "input->purchase#setMoneyReceived"
+              }
+          %>
+        </div>
+        <div class="col-6 col-md-4 purchases-selector-hidden-toggle">
+          <%= f.label t('forms.models.transaktion.labels.money_received') %>
+          <%= f.hidden_field :money_received, step: '0.01',
+              data: { purchase_target: "moneyReceivedPurchase" } %>
+          <div>
+            <p class="fw-bold h5 mt-3 d-inline-block" data-purchase-target="moneyReceivedPurchaseSee">
+              0
+            </p>
+            <p class="fw-bold h5 mt-3 d-inline-block">
+              <%= @pos_session.type_of_currency %>
+            </p>
+          </div>
+        </div>
+        <div class="col-6 col-md-4 purchases-selector-hidden-toggle">
+          <%= f.select :payment_method,
+                options_for_select(@payment_methods, 'Efectivo'),
+                class: "form-control",
+                label: t('forms.models.transaktion.labels.payment_method') %>
+        </div>
+        <div class="col-12 my-3 purchases-selector-hidden-toggle">
+          <h5 class="fw-bold">Datos del Cobrador</h5>
+        </div>
+        <div class="col-4 purchases-selector-hidden-toggle">
+          <label class="my-2">CI</label>
+          <input
+            data-action="input->purchase#searchCollector"
+            data-purchase-target="customerReceivedCi"
+            class="form-control" type="text" name="ci_collector"
+          >
+        </div>
+        <div class="col-4 purchases-selector-hidden-toggle">
+          <label class="my-2">Nombre</label>
+          <input
+            data-purchase-target="customerReceivedName"
+            class="form-control" type="text" name="name_collector"
+          >
+        </div>
+        <div class="col-6 col-md-4 purchase-align-button-transaktion-new">
+          <%= f.submit "Realizar Compra", class: "btn btn-primary btn-lg" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</section>

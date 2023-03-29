@@ -1,0 +1,72 @@
+<nav class="app__pagination_container mt-4">
+  <ul class="pagination justify-content-center">
+    <% if records_pagination.current_page > 1 %>
+      <li class="page-item">
+        <%= link_to({page: 1, type_filter: params[:type_filter],
+              warehouse_filter: params[:warehouse_filter], provider_id: params[:provider_id],
+              start_date: params[:start_date], end_date: params[:end_date]},
+              {class: "page-link"}) do
+        %>
+          <i class="fa-solid fa-angles-left"></i>
+        <% end %>
+      </li>
+      <li class="page-item">
+        <%= link_to({page: records_pagination.current_page - 1, type_filter: params[:type_filter],
+            warehouse_filter: params[:warehouse_filter], provider_id: params[:provider_id],
+            start_date: params[:start_date], end_date: params[:end_date]},
+            {class: "page-link"}) do
+        %>
+          <i class="fa-solid fa-angle-left"></i>
+        <% end %>
+      </li>
+    <% end %>
+
+    <% if records_pagination.total_pages > 1 %>
+      <% if records_pagination.current_page <= 5 %>
+        <% start_page = 1 %>
+        <% end_page = [10, records_pagination.total_pages].min %>
+      <% else %>
+        <% start_page = records_pagination.current_page - 4 %>
+        <% end_page = [(records_pagination.current_page + 5), records_pagination.total_pages].min %>
+      <% end %>
+
+      <% (start_page..end_page).each do |page| %>
+        <% if records_pagination.current_page == page %>
+          <li class="page-item active"><span class="page-link"><%= page %></span></li>
+        <% else %>
+          <li class="page-item">
+            <%= link_to page, {
+                  page: page, type_filter: params[:type_filter],
+                  warehouse_filter: params[:warehouse_filter], provider_id: params[:provider_id],
+                  start_date: params[:start_date], end_date: params[:end_date] },
+                  { class: "page-link" }
+            %>
+          </li>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <% if records_pagination.current_page < records_pagination.total_pages %>
+      <li class="page-item">
+        <%= link_to({page: records_pagination.current_page + 1,
+              type_filter: params[:type_filter],
+              warehouse_filter: params[:warehouse_filter], provider_id: params[:provider_id],
+              start_date: params[:start_date], end_date: params[:end_date]},
+              {class: "page-link"}) do
+        %>
+          <i class="fa-solid fa-angle-right"></i>
+        <% end %>
+      </li>
+      <li class="page-item">
+        <%= link_to({page: records_pagination.total_pages,
+              type_filter: params[:type_filter],
+              warehouse_filter: params[:warehouse_filter], provider_id: params[:provider_id],
+              start_date: params[:start_date], end_date: params[:end_date]},
+              {class: "page-link"}) do
+        %>
+          <i class="fa-solid fa-angles-right"></i>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+</nav>

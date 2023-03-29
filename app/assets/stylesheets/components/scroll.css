@@ -1,0 +1,96 @@
+/* Ancho y altura de la barra de desplazamiento */
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+
+::-moz-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+/* Fondo de la barra de desplazamiento */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 0.3rem;
+}
+
+::-moz-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 0.3rem;
+}
+
+/* Color de la barra de desplazamiento */
+::-webkit-scrollbar-thumb {
+  background: #5c9bf3;
+  border-radius: 0.3rem;
+}
+
+::-moz-scrollbar-thumb {
+  background: #5c9bf3;
+  border-radius: 0.3rem;
+}
+
+/* Cambia la apariencia de la barra de desplazamiento al pasar el cursor sobre ella */
+::-webkit-scrollbar-thumb:hover {
+  background: #3e74c0;
+}
+
+::-moz-scrollbar-thumb:hover {
+  background: #3e74c0;
+}
+
+
+.table-responsive::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+  border-radius: 0.3rem;
+}
+
+.table-responsive::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+  background: #5c9bf3;
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover {
+  background: #3e74c0;
+}
+
+.table-responsive::-moz-scrollbar {
+  width: 7px;
+  height: 7px;
+  border-radius: 0.3rem;
+}
+
+.table-responsive::-moz-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.table-responsive::-moz-scrollbar-thumb {
+  background: #5c9bf3;
+}
+
+.table-responsive::-moz-scrollbar-thumb:hover {
+  background: #3e74c0;
+}
+
+.table-responsive::-ms-scrollbar {
+  width: 7px;
+  height: 7px;
+  border-radius: 0.3rem;
+}
+
+.table-responsive::-ms-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.table-responsive::-ms-scrollbar-thumb {
+  background: #5c9bf3;
+}
+
+.table-responsive::-ms-scrollbar-thumb:hover {
+  background: #3e74c0;
+}

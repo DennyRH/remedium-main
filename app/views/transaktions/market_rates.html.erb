@@ -1,0 +1,143 @@
+<section class="purchases-container" data-controller="market">
+  <div class="app-papper justify-content-center">
+    <div class="purchase-search-products row justify-content-between">
+      <div class="col-6 col-md-4">
+        <%= form_with url: search_sale_pos_session_transaktions_path(@pos_session), method: :post, class: "purchase-search-products-form", data: { market_target: "formSearch" } do |form| %>
+          <%= form.hidden_field :market_rates, value: "true" %>
+          <%= form.hidden_field :search_in_warehouse_the_session, value: "true" %>
+          <%= form.label :buscar_producto %>
+          <%=
+            form.search_field :search_product, id: "search-input",
+              class: "form-control purchase-search-input",
+              data: {
+                action: "input->market#searchProduct",
+                market_target: "inputSearchProduct"
+              }
+          %>
+        <% end %>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3">
+        <%= link_to "Confirmar Cotización", pos_session_modal_confirm_market_rates_path(@pos_session),
+            class: "btn btn-outline-primary purchases-button-create-product",
+            data: { turbo_frame: "modal_confirm_market_rates" } %>
+      </div>
+      <div data-market-target="searchResults" class="col-12 search_results" id="search_results_market_rates"></div>
+    </div>
+    <div class="table-responsive my-4">
+      <table class="table table-bordered">
+        <caption data-market-target="productName"></caption>
+        <thead>
+          <tr>
+            <th scope="col" class="min-width-6">Descripción</th>
+            <th scope="col">Unidades Caja</th>
+            <th scope="col">Precio Unitario</th>
+            <th scope="col">Precio Caja</th>
+            <th scope="col">Total Stock</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td data-market-target="productDescription" class="min-width-6" scope="row"></td>
+            <td data-market-target="unitPackage"></td>
+            <td data-market-target="priceUnit"></td>
+            <td data-market-target="pricePackage"></td>
+            <td data-market-target="totalStock"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="purchase-item-transactions-form mt-4">
+      <%= form_with url: item_transactions_pos_session_transaktions_path(@pos_session),
+          data: { market_target: "formAddItemTransaktionMarketRates" },
+          method: :post do |form| %>
+        <input type="hidden" data-market-target="subtotalProduct">
+        <input type="hidden" data-market-target="qtyPerPackage">
+        <%= form.hidden_field :market_rates, value: "true" %>
+        <%= form.hidden_field :qty_unit, data: { market_target: "qtyUnitSale" },
+            class: "form-control purchase-item-transactions-input" %>
+        <%= form.hidden_field :item_id, data: { market_target: "itemId" },
+            class: "form-control purchase-item-transactions-input" %>
+        <div class="row">
+          <div class="col-6 col-lg-3">
+            <%= form.label "Unidades" %>
+            <%= form.number_field :unit_total, class: "form-control purchase-item-transactions-input",
+                data: { action: "input->market#sumSubtotalForUnits", market_target: "unitTotalSale" } %>
+          </div>
+          <div class="col-6 col-lg-4 col-xl-3">
+            <%= form.label "Cantidad Paq./Caja" %>
+            <%= form.number_field :qty_package, class: "form-control purchase-item-transactions-input",
+                data: { action: "input->market#sumSubtotalForPackage", market_target: "qtyPackageSale" } %>
+          </div>
+          <div class="col-6 col-lg-3">
+            <%= form.label :subtotal %>
+            <%= form.hidden_field :sub_total, step: '0.01',
+                class: "form-control", data: { market_target: "subtotal" } %>
+            <div>
+              <p class="fw-bold h5 mt-2 d-inline-block" data-market-target="subtotalSee">
+                0
+              </p>
+              <p class="fw-bold h5 mt-2 d-inline-block">
+                <%= @pos_session.type_of_currency %>
+              </p>
+            </div>
+          </div>
+          <div class="col-6 col-lg-3">
+            <button
+              type="button" data-action="click->market#addItemTransaktionAndReset"
+              class="btn btn-outline-primary sale-align-button-item-transaktions-add"
+            >
+              Agregar
+            </button>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <div class="app-papper my-3" id="item_transactions_market_rates">
+    <%= render partial: "shared/tables/table_items_added_market_rates",
+        locals: { item_transactions: session[:item_transactions_market_rates] } %>
+  </div>
+  <div class="app-papper my-3">
+    <%= form_with url: create_sale_pos_session_transaktions_path(@pos_session), method: :post, class: "purchase-search-products-form" do |form| %>
+      <%= form.hidden_field :type_transaktion, value: "Market rates" %>
+      <%= form.hidden_field :pos_session_id, value: @pos_session.id,
+            data: { market_target: "posSessionId" } %>
+      <%= form.hidden_field :customer_id, data: { market_target: "customerIdSales" } %>
+      <%= form.hidden_field :total, step: '0.01', data: { market_target: "totalSales" } %>
+      <div class="row">
+        <div class="col-6 col-md-4 my-2">
+          <%= form.label t('forms.models.customer.labels.nit') %>
+          <%=
+            form.number_field :nit, class: "form-control",
+              data: {
+                action: "input->market#searchBuyer",
+                market_target: "inputSearchCustomer"
+              }
+          %>
+        </div>
+        <div class="col-6 col-md-4 my-2">
+          <%= form.label t('forms.models.customer.labels.social_reason') %>
+          <%= form.text_field :social_reason, class: "form-control",
+              data: { market_target: "socialReasonCustomerSales" } %>
+        </div>
+        <div class="col-6 col-md-4 my-2">
+          <%= form.label t('forms.models.customer.labels.email') %>
+          <%= form.text_field :email, class: "form-control",
+              data: { market_target: "emailCustomerSales" } %>
+        </div>
+        <div class="col-6 col-md-4 my-2">
+          <%= form.label t('forms.models.transaktion.labels.description') %>
+          <%= form.text_field :description, class: "form-control", data: { action: "input->market#setTotalSum" } %>
+        </div>
+        <div class="col-6 col-md-4 my-2">
+          <%= form.label t('forms.models.transaktion.labels.payment_method') %>
+          <%= form.select :payment_method, options_for_select(@payment_methods, 'Efectivo'),
+               class: "form-control" %>
+        </div>
+        <div class="col-6 col-md-4 mt-4 purchase-align-button-transaktion-new mt-3">
+          <%= form.submit "Realizar Cotización", class: "btn btn-primary btn-lg" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</section>

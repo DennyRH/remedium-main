@@ -1,0 +1,7 @@
+<section class="app-papper row justify-content-between" data-controller="customers">
+  <%= render partial: 'shared/searchs/search_customers', locals: {kind: 'buyer'} %>
+  <div class="col-12" id="search_results_buyers_index">
+    <%= render partial: 'shared/tables/table_customers', locals: { customers: @buyers, kind: 'buyer'} %>
+    <%= render partial: 'shared/pagination', locals: { records_pagination: @buyers } %>
+  </div>
+</section>

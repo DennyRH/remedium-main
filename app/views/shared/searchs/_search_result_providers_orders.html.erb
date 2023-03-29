@@ -1,0 +1,9 @@
+<% customers.each do |obj| %>
+  <p
+    class="search-results-sales border-bottom"
+    data-action="click->orders#selectProvider"
+    value="<%= { customer: obj }.to_json %>"
+  >
+    <%= obj.name %>
+  </p>
+<% end %>

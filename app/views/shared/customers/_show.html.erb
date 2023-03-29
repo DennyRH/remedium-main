@@ -1,0 +1,38 @@
+<section class="app-papper show-user-container row">
+  <div class="col-12 col-md-6 col-lg-5">
+    <img src="<%= asset_path("user.jpg") %>" class="warehouse-show-img" alt="<%= t("forms.models.customer.type.#{kind}")%>">
+  </div>
+  <div class="show-user-info col-12 col-md-6 col-lg-7">
+    <div class="contenido">
+      <h5>Nombre: </h5>
+      <p><%= obj.name %></p>
+    </div>
+    <div class="contenido">
+      <h5>NIT: </h5>
+      <p><%= obj.document_number %></p>
+    </div>
+    <div class="contenido">
+      <h5>Correo eletrónico: </h5>
+      <p><%= obj.email  %></p>
+    </div>
+    <div class="contenido">
+      <h5>Teléfono: </h5>
+      <p><%= obj.phone %></p>
+    </div>
+    <div class="contenido">
+      <h5>Estado: </h5>
+      <p><%= obj.status  %></p>
+    </div>
+    <div class="contenido">
+      <h5>Fecha de creacion:  </h5>
+      <p><%= obj.created_at.localtime.strftime("%Y-%m-%d %H:%M")  %></p>
+    </div>
+    <div class="contenido">
+      <h5>Fecha de actualizacion: </h5>
+      <p><%= obj.updated_at.localtime.strftime("%Y-%m-%d %H:%M")  %></p>
+    </div>
+  </div>
+  <div class="col-12 mt-3">
+    <%= link_to "Editar", send("edit_#{kind}_path", obj), class: "btn btn-primary" %>
+  </div>
+</section>

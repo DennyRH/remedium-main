@@ -1,0 +1,17 @@
+.card-warehouse-text-decoration-none {
+  text-decoration: none;
+  color: #5e5f5f;
+  transition: 0.2s;
+}
+
+.card-warehouse-text-decoration-none:hover {
+  color: black;
+  transition: 0.2s;
+}
+
+.product-papper {
+  background-color: #FFFFFF;
+
+  padding: none;
+  border-radius: 0.5rem;
+}

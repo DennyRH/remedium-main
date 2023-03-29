@@ -1,0 +1,51 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  description: MyString
+  presentation: MyString
+  code: MyString
+  purchase_price: 1
+  trademark: MyString
+  rrss_model: MyString
+  provider_id: MyString
+  list_price: 1
+  box_cost: 1
+  unit_cost: 1
+  another_price: 1
+  characteristics: MyString
+  generic_name: MyString
+  observation: MyString
+  checked: false
+  unit: MyString
+  package: MyString
+  category: MyString
+  sub_category: MyString
+  weight: MyString
+  expiration: false
+  type_b_code: MyString
+
+two:
+  name: MyString
+  description: MyString
+  presentation: MyString
+  code: MyString
+  purchase_price: 1
+  trademark: MyString
+  rrss_model: MyString
+  provider_id: MyString
+  list_price: 1
+  box_cost: 1
+  unit_cost: 1
+  another_price: 1
+  characteristics: MyString
+  generic_name: MyString
+  observation: MyString
+  checked: false
+  unit: MyString
+  package: MyString
+  category: MyString
+  sub_category: MyString
+  weight: MyString
+  expiration: false
+  type_b_code: MyString

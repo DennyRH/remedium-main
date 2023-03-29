@@ -1,0 +1,154 @@
+<section class="app-papper warehouse-show-container row">
+  <div class="col-12 row mb-3">
+    <div class="col-10 col-md-11">
+      <h4 class="text-center fw-bold" ><%= @product.name %></h4>
+    </div>
+    <div class="col-2 col-md-1 text-end">
+      <% if policy(Product).edit? %>
+        <%= link_to edit_product_path(@product) do %>
+          <i class="fa-solid fa-pen-to-square app-card-warehouse-icon fw-normal"></i>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+  <div class="warehouse-show-info col-12 col-md-6">
+    <div class="contenido">
+      <h5>Redes Sociales: </h5>
+      <p><%= @product.model_rrss %></p>
+    </div>
+    <div class="contenido">
+      <h5>Tipo de unidad: </h5>
+      <p><%= @product.unit  %></p>
+    </div>
+    <div class="contenido">
+      <h5>Tipo de envase:  </h5>
+      <p><%= @product.package%></p>
+    </div>
+    <div class="contenido">
+      <h5>Unidades por envase: </h5>
+      <p><%= @product.total_unit  %></p>
+    </div>
+    <div class="contenido">
+      <h5>Presentación: </h5>
+      <p><%= @product.presentation  %></p>
+    </div>
+    <div class="contenido">
+      <h5>Laboratorio: </h5>
+      <p><%= @product.trademark %></p>
+    </div>
+    <div class="contenido">
+      <h5>Categoria: </h5>
+      <p><%= @product.category %></p>
+    </div>
+    <div class="contenido">
+      <h5>Subcategoria:  </h5>
+      <p><%= @product.sub_category%></p>
+    </div>
+    <div class="contenido">
+      <h5>Estado: </h5>
+      <p><%= @product.status  %></p>
+    </div>
+    <div class="contenido">
+      <h5>Gravamen: </h5>
+      <p><%= @product.taxes  %></p>
+    </div>
+  </div>
+  <div class="warehouse-show-info col-12 col-md-6">
+    <div class="contenido">
+      <h5>Proveedor:  </h5>
+      <p><%= @product.customer&.name %></p>
+    </div>
+    <div class="contenido">
+      <h5>Fecha de creacion: </h5>
+      <p><%= @product.created_at.localtime.strftime("%Y-%m-%d %H:%M") %></p>
+    </div>
+    <% if @product.created_at != @product.updated_at %>
+      <div class="contenido">
+        <h5>Fecha de actualizacion: </h5>
+        <p><%= @product.updated_at.localtime.strftime("%Y-%m-%d %H:%M") %></p>
+      </div>
+    <% end %>
+    <div class="contenido">
+      <h5>Codigo alternativo:  </h5>
+      <p><%= @product.alternative_code %></p>
+    </div>
+    <div class="contenido">
+      <h5>Codigo: </h5>
+      <p><%= @product.code %></p>
+    </div>
+    <div class="contenido">
+      <h5>ID del importador: </h5>
+      <p><%= @product.import_id %></p>
+    </div>
+    <div class="contenido">
+      <h5>Nombre:  </h5>
+      <p><%= @product.name %></p>
+    </div>
+    <div class="contenido">
+      <h5>Nombre Genérico: </h5>
+      <p><%= @product.generic_name  %></p>
+    </div>
+    <div class="contenido">
+      <p>
+        <span class="h5">Descripción:</span>
+        <span class="text-end"><%= @product.description%></span>
+      </p>
+    </div>
+    <div class="contenido">
+      <h5>Caracteristicas: </h5>
+      <p><%= @product.characteristics  %></p>
+    </div>
+    <div class="contenido">
+      <h5>Industria: </h5>
+      <p><%= @product.industry  %></p>
+    </div>
+  </div>
+</section>
+<% if current_user.owner_or_admin? %>
+  <section class="app-papper warehouse-show-container row my-4">
+    <div class="col-12 row mb-3">
+      <div class="col-11">
+        <h3 class="fw-bold text-center">Kardex</h3>
+      </div>
+      <div class="col-1">
+        <%= link_to product_path(@product), class: "btn btn-secondary" do %>
+          <i class="fa-solid fa-arrow-rotate-right"></i>
+        <% end %>
+      </div>
+    </div>
+    <div class="col-12" data-controller="products">
+      <%=
+        form_with url: product_path(@product),
+          method: :get, class: "purchase-search-products-form",
+          data: { products_target: "formFilterKardex" } do |form|
+      %>
+        <div class="row mb-3">
+          <div class="col-12 col-md-4 mb-3">
+            <%= form.label "Filtrar por Sucursal" %>
+            <%=
+              form.select :warehouse_filter, options_for_select(@warehouses_filter, params[:warehouse_filter]),
+                { include_blank: 'Seleccionar' },
+                class: "form-control",
+                data: { action: "change->products#sendFilterKardex" }
+            %>
+          </div>
+          <div class="col-5 col-md-4">
+            <%= form.label "Desde" %>
+            <%= form.date_field :start_date, value: params[:start_date], class: "form-control ",
+                  data: { action: "change->products#sendFilterKardex" } %>
+          </div>
+          <div class="col-5 col-md-4">
+            <%= form.label "Hasta" %>
+            <%= form.date_field :end_date, value: params[:end_date], class: "form-control ",
+                  data: { action: "change->products#sendFilterKardex" } %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <div class="col-12">
+      <%= render partial: 'shared/tables/table_kardex',
+            locals: { item_transaktions: @item_transaktions } %>
+      <%= render partial: 'shared/pagination', locals: { records_pagination: @item_transaktions } %>
+    </div>
+  </section>
+<% end %>

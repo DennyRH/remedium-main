@@ -1,0 +1,11 @@
+<%= turbo_frame_tag "modal_confirm_market_rates" do %>
+  <div id="myModal2" class="modal2">
+    <div class="modal-content2">
+      <h2>Confirmar Cotización</h2>
+      <div class="my-4">
+        <%= render partial: "shared/forms/form_confirm_market_rates",
+            locals: { pos_session: @pos_session, payment_methods: @payment_methods } %>
+      </div>
+    </div>
+  </div>
+<% end %>

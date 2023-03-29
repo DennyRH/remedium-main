@@ -1,0 +1,84 @@
+<div id="confirm_market_rates" data-controller="market">
+  <div>
+    <%=
+      form_with url: search_market_pos_session_transaktions_path(pos_session),
+                method: :post,
+                class: "purchase-search-products-form",
+                data: { market_target: "formSearchMarketRates" } do |form|
+    %>
+      <%= form.label "Buscar cotización" %>
+      <%=
+        form.search_field :search_market_rates,
+        id: "search-input",
+        class: "form-control purchase-search-input",
+        data: { action: "input->market#searchMarketRates", market_target: "inputSearchMarketRates" }
+      %>
+    <% end %>
+    <div
+      data-market-target="searchResultsMarketRates"
+      class="search_results"
+      id="search_results_confirm_market_rates"
+    ></div>
+  </div>
+  <div>
+    <%=
+      form_with url: pos_session_transaktion_path(pos_session, 0),
+                method: :put,
+                data: { turbo_frame: "_top", market_target: "formUpdateConfirmMarketRates" },
+                class: "purchase-search-products-form" do |form|
+    %>
+      <div class="row">
+        <%= form.hidden_field :id, class: "form-control", data: { market_target: "marketRatesId" } %>
+        <%= form.hidden_field :receiver_pos_session_id, value: pos_session.id %>
+        <div class="col-6 col-md-4 my-2">
+          <%= form.label t('forms.models.transaktion.labels.total') %>
+          <%= form.hidden_field :total, class: "form-control", step: '0.01',
+                                data: { market_target: "totalMarketRates" } %>
+          <div>
+            <p data-market-target="totalMarketRatesSee" class="fw-bold h5 mt-2 d-inline-block">
+              0
+            </p>
+            <p class="fw-bold h5 mt-2 d-inline-block">
+              <%= pos_session.type_of_currency %>
+            </p>
+          </div>
+        </div>
+        <div class="col-6 col-md-4 my-2">
+          <%= form.label t('forms.models.transaktion.labels.description') %>
+          <%= form.text_field :description, class: "form-control",
+                              data: { market_target: "descriptionConfirmMarketRates" }  %>
+        </div>
+        <div class="col-6 col-md-4 my-2">
+          <%= form.label t('forms.models.transaktion.labels.money_received') %>
+          <%= form.number_field :money_received, class: "form-control",
+              step: '0.01', data: { action: "input->market#sumTotalConfirmMarketRates" } %>
+        </div>
+        <div class="col-6 col-md-4 my-2">
+          <%= form.label t('forms.models.transaktion.labels.money_returned') %>
+          <%= form.hidden_field :money_returned, class: "form-control",
+              step: '0.01', data: { market_target: "moneyReturnedMarketRates" } %>
+          <div>
+            <p class="fw-bold h5 mt-2 d-inline-block" data-market-target="moneyReturnedMarketRatesSee">
+              0
+            </p>
+            <p class="fw-bold h5 mt-2 d-inline-block">
+              <%= pos_session.type_of_currency %>
+            </p>
+          </div>
+        </div>
+        <div class="col-6 col-md-4 my-2">
+          <%= form.label t('forms.models.transaktion.labels.payment_method') %>
+          <%= form.select :payment_method, options_for_select(payment_methods, 'Efectivo'),
+            class: "form-control", data: { market_target: "selectPaymentMethodConfirm" } %>
+        </div>
+        <div class="col-6 col-md-4 col-lg-3 my-2 purchase-align-button-transaktion-new">
+          <%= form.submit "Confirmar Cotización", class: "btn btn-primary mt-4" %>
+        </div>
+        <div class="col-6 col-md-4 col-lg-3 my-2 purchase-align-button-transaktion-new">
+          <%= link_to 'Cancelar', pos_session_market_rates_path(pos_session),
+              class: "btn btn-outline-primary mt-4", data: { turbo_frame: "_top" } %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

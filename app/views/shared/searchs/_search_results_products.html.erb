@@ -1,0 +1,9 @@
+<% products.each do |obj| %>
+  <p
+    class="search-results-sales border-bottom"
+    data-action="click->search#selectProduct"
+    value="<%= { product: obj }.to_json %>"
+  >
+    <%= obj.description %>
+  </p>
+<% end %>

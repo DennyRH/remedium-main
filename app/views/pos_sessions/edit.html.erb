@@ -1,0 +1,62 @@
+<section class="row justify-content-between arching-edit-container" data-controller="arching">
+  <div class="app-papper col-12">
+    <div class="row">
+      <% @arching_ticketings.each do |obj| %>
+        <div class="col-12 col-md-4 col-lg-3 col-xl-2 mb-4">
+          <img
+            src="<%= asset_path(obj[:img]) %>"
+            alt="Billetes"
+            class="arching-edit-money-img"
+          />
+          <div class="d-flex justify-content-between align-items-center mt-2">
+            <input
+              data-arching-target="<%= obj[:action_target] %>"
+              data-action="input->arching#onchange" type="number"
+              class="d-inline-block arching-edit-money-input form-control "
+            >
+            <div
+              data-arching-target="<%= obj[:value_target] %>"
+              class="ps-2 arching-edit-money-input"
+            >Bs 0</div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="app-papper col-12 col-md-5 mt-3">
+    <h4>Detalles</h4>
+    <div class="border rounded p-3">
+      <h5>
+        Inicio:
+        <%= @pos_session.created_at.localtime.strftime("%Y-%m-%d %H:%M") %>
+      </h5>
+      <h5>
+        Cierre:
+        <%= @pos_session.created_at == @pos_session.updated_at ?
+            'En proceso' : @pos_session.updated_at.strftime("%Y-%m-%d %H:%M")
+        %>
+      </h5>
+      <h5>
+        Responsable: <%= @pos_session.user.short_name %>
+      </h5>
+      <h5>
+        Caja Chica:
+        <%= @pos_session.type_of_currency %>
+        <%= @pos_session.petty_cash %>
+      </h5>
+    </div>
+  </div>
+  <div class="app-papper col-12 col-md-6 mt-3">
+    <%= bootstrap_form_for(@pos_session) do |f| %>
+      <input type="hidden" name="total_arching_money" data-arching-target="totalArchingMoney">
+      <%= f.number_field :total_balance, data: { arching_target: 'totalInput' },
+            readonly: true, hide_label: true, class: 'visually-hidden', value: 0 %>
+      <div class="mb-2"><%= t('forms.models.pos_session.labels.total_balance') %></div>
+      <div class="ps-2 border rounded" style="font-size: 70px" data-arching-target='totalShowed'>Bs 0.00</div>
+      <%= f.text_area :observation, rows: 3,
+            label: t('forms.models.pos_session.labels.observation') %>
+      <%= f.submit "Finalizar arqueo", class: "btn btn-primary", data: { turbo_confirm: "Esta acción es irreversible. Estas seguro?" } %>
+    <% end %>
+  </div>
+</section>

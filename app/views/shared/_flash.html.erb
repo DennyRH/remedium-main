@@ -1,0 +1,8 @@
+<% flash.each do |flash_type, message| %>
+  <div class="flash <%= flash_type == 'notice' ? "flash-success" : "flash-danger" %> alert alert-dismissible fade show" role="alert">
+    <span><%= message %> </span>
+    <a data-bs-dismiss="alert" aria-label="Close" style="cursor: pointer">
+      <i class="fas fa-times ps-2"></i>
+    </a>
+  </div>
+<% end %>

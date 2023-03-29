@@ -1,0 +1,20 @@
+<% products.each do |obj| %>
+  <% if obj.class.name == 'Item' %>
+    <p
+      class="search-results-sales border-bottom"
+      data-action="click->purchase#selectProduct"
+      value="<%= { item: obj, product: obj.product}.to_json %>"
+    >
+      <%= obj.product.description %> 
+      (<%= obj.total_stock %> unidades)
+    </p>
+  <% else %>
+    <p
+      class="search-results-sales"
+      data-action="click->purchase#selectProduct"
+      value="<%= { product: obj }.to_json %>"
+    >
+      <%= obj.description %> (sin item)
+    </p>
+  <% end %>
+<% end %>

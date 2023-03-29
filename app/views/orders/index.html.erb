@@ -1,0 +1,46 @@
+<section class="app-papper row justify-content-between mb-4" data-controller="orders">
+  <div class="col-12">
+    <h3 class="fw-bold text-center mt-2">Sugerencias de Pedidos</h3>
+    <h5 class="text-center mt-2">En base a las ventas del anterior mes</h5>
+    <div class="col-12 row justify-content-between mb-4 mt-5">
+      <div class="col-5 col-md-4">
+        <%=
+          bootstrap_form_with url: searches_providers_path,
+            method: :post, class: "purchase-search-products-form",
+            data: { orders_target: "formSearchProvider" } do |form|
+        %>
+          <%= form.hidden_field :partial_path, value: 'shared/searchs/search_result_providers_orders' %>
+          <%=
+            form.search_field :filter,
+              class: "form-control purchase-search-input", value: @provider ? @provider.name : "", 
+              autofocus: true, id: "search-input",
+              data: { action: "input->orders#searchProviders", orders_target: "inputSearchProvider" },
+              label: t('forms.orders.filter_provider')
+          %>
+        <% end %>      
+        <div class="mt-2 " data-orders-target="searchResultProviders" id="search_results_providers_index"></div>
+      </div>
+      <div class="col-5 col-md-4">
+        <%=
+          bootstrap_form_with url: orders_path,
+            method: :get, class: "purchase-search-products-form",
+            data: { orders_target: "formFilterSuggestions" } do |form|
+        %>
+          <%= form.hidden_field :provider_id, value: params[:provider_id], class: "form-control ",
+                data: { action: "change->orders#sendFormFilter", orders_target: "providerId" } %>
+          <%= form.collection_select :warehouse_filter, @warehouses_filtered, :id, :name, {prompt: "Elegir sucursal", label: t('forms.orders.filter_warehouse'), selected: @warehouse_selected&.id}, data: { 'action'=> "change->orders#sendFormFilter" } %>
+        <% end %>
+      </div>
+      <div class="col-1 mt-4">
+        <%= link_to orders_path, class: "btn btn-secondary" do %>
+          <i class="fa-solid fa-arrow-rotate-right"></i>
+        <% end %>
+      </div>
+    </div>
+    <div class="col-12 mt-4">
+      <%= render partial: 'shared/tables/table_orders_suggestions',
+            locals: { items_suggestions: @items_suggestions } %>
+      <%= render partial: 'shared/pagination', locals: { records_pagination: @items } %>
+    </div>
+  </div>
+</section>

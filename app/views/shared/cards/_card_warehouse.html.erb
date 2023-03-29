@@ -1,0 +1,32 @@
+<div class="row">
+  <% warehouses.each do |obj| %>
+    <div class="col-6 col-md-4 col-lg-3 card-warehouse-container">
+      <%= link_to warehouse_path(obj), class: "card-warehouse-text-decoration-none" do %>
+        <div class="card">
+          <img
+            <% # change the url with the image url the warehouse %>
+            src="<%= asset_path("warehouse.png") %>"
+            class="card-img-top"
+            alt="warehouse"
+          />
+          <div class="card-body">
+            <p class="card-title fw-bold"><%= obj.name %></p>
+            <p class="card-text text-truncate pb-2">
+              <%= obj.warehouse_detail ? obj.warehouse_detail.address : "Sin direccion" %>
+            </p>
+            <div class="d-flex justify-content-between">
+              <div class="align-self-center flex-fill">
+                <%= link_to edit_warehouse_path(obj), style: 'color: gray' do %>
+                <i class="fa-solid fa-pen-to-square app-card-warehouse-icon fw-normal"></i>
+                <% end %>
+              </div>
+              <div>
+                <%= link_to "Inventario", warehouse_items_path(obj), class: "btn btn-outline-primary app-card-warehouse-btn" %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>

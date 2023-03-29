@@ -1,0 +1,31 @@
+<div class="col-12">
+  <%= bootstrap_form_with(model: @user, url: users_admin_index_path(@user)) do |f| %>
+    <%= render partial: 'shared/forms/errors', locals: { object: @user } %>
+    <div class="row">
+          <div class="col-12 col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+            <%= f.text_field :name, label: "Nombre" %>
+          </div>
+          <div class="col-12 col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+            <%= f.text_field :last_name, label: "Apellido" %>
+          </div>
+          <div class="col-12 col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+            <%= f.text_field :email, label: "Email" %>
+          </div>
+          <div class="col-12 col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+            <%= f.password_field :password, label: "Contraseña" %>
+          </div>
+          <div class="col-12 col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+            <%= f.text_field :ci, label: "CI" %>
+          </div>
+      <div class="col-12 col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+        <%= f.select :role_id, options_for_select(@rol_ids), label: "Cargo:", prompt: 'Elija uno' , option_class: "select"%>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-4 col-md-4 col-lg-4 col-xl-4 mt-2 mb-4">
+        <%= f.submit "Crear Usuario", class: "btn btn-primary" %>
+      </div>
+    </div>
+
+  <% end %>
+</div>

@@ -1,0 +1,143 @@
+<%
+  links = [
+    {
+      title: "Estadísticas", icon: "fa-solid fa-house",
+      url: "/accounts/#{current_account ? current_account.id : ""}",
+      available: policy(current_account).show?
+    },
+    {
+      title: "Usuarios", icon: "fa-solid fa-users", url: "/users_admin",
+      available: policy(User).index?
+    },
+    {
+      title: "Clientes", icon: "fa-solid fa-user-tie",
+      url: "/buyers", available: policy(Buyer).index?
+    },
+    {
+      title: "Proveedores", icon: "fa-solid fa-people-carry-box",
+      url: "/providers", available: policy(Provider).index?
+    },
+    {
+      title: "Sucursales", icon: "fa-solid fa-warehouse",
+      url: "/warehouses", available: policy(Warehouse).index?
+    },
+    {
+      title: "Caja", icon: "fa-solid fa-cash-register",
+      url: "/pos_sessions", available: policy(PosSession).index?
+    },
+    {
+      title: "Productos", icon: "fa-solid fa-box-open",
+      url: "/products", available: policy(Product).index?
+    },
+    {
+      title: "Pagos", icon: "fa-solid fa-money-check-dollar",
+      url: "/payment_center", available: policy(Transaktion).payment_center?
+    },
+    {
+      title: "Pedidos", icon: "fa-solid fa-truck-ramp-box", 
+      url: "/orders", available: true
+    }
+  ]
+%>
+<aside class="sidebar-container">
+  <!-- sidebar desktop -->
+  <div class="sidebar-desktop-container">
+    <div class="sidebar-desktop-container-logo">
+      <%= link_to root_path do %>
+        <img
+          src="<%= asset_path('logoprueba.png') %>"
+          alt="logo"
+          class="sidebar-desktop-logo-img"
+        />
+      <% end %>
+    </div>
+    <% if current_user %>
+      <div class="mt-4 sidebar-desktop-container-options">
+        <ul class="sidebar-desktop-options">
+          <% links.each do |obj| %>
+            <% if obj[:available] %>
+              <%= link_to obj[:url] do %>
+                <li>
+                  <i class="<%= obj[:icon] %> sidebar-desktop-icons"></i>
+                  <p><%= obj[:title] %></p>
+                </li>
+              <% end %>
+            <% end %>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <div class="sidebar-desktop-container-login">
+      <%= link_to users_admin_path(current_user) do %>
+        <img
+          src="<%= asset_path('user.jpg') %>"
+          alt="user sin imagen"
+          class="sidebar-desktop-login-img"
+        />
+      <% end %>
+      <p>
+        <%= current_user.short_name %>
+      </p>
+      <p class="text-muted mt-0"><%= current_user ? current_user.role.name_es || current_user.role.name : "" %></p>
+      <% if current_user %>
+        <%= link_to "Cerrar sesión", destroy_user_session_path,
+            data: { turbo_method: :delete }, class: 'btn btn-outline-primary btn-sm' %>
+      <% else %>
+        <%= link_to "Iniciar sesión", new_user_session_path, class: 'btn btn-outline-primary' %>
+      <% end %>
+    </div>
+  </div>
+  <!-- sidebar mobile -->
+  <div class="sidebar-mobile-container" data-controller="menu">
+    <div class="row justify-content-between">
+      <div class="sidebar-mobile-logo-container col-3">
+        <%= link_to root_path do %>
+          <img
+            src="<%= asset_path('logoprueba.png') %>"
+            alt="logo"
+            class="sidebar-mobile-logo-img"
+          />
+        <% end %>
+      </div>
+      <div class="col-9">
+        <button
+          class="btn btn-outline-primary sidebar-mobile-menu"
+          data-action="click->menu#change"
+        >
+          <i data-menu-target="icon" class="fa-solid fa-bars sidebar-mobile-menu-icon"></i>
+        </button>
+      </div>
+    </div>
+    <div data-menu-target="options" class="hidden sidebar-mobile-container-options">
+      <% if current_user %>
+        <ul class="sidebar-desktop-options">
+          <% links.each do |obj| %>
+            <%= link_to obj[:url] do %>
+              <li>
+                <i class="<%= obj[:icon] %> sidebar-desktop-icons"></i>
+                <p><%= obj[:title] %></p>
+              </li>
+            <% end %>
+          <% end %>
+        </ul>
+      <% end %>
+      <div class="sidebar-mobile-container-login py-5">
+        <img
+          src="<%= asset_path('user.jpg') %>"
+          alt="user sin imagen"
+          class="sidebar-desktop-login-img"
+        />
+        <p>
+          <%= current_user.short_name %>
+        </p>
+        <p class="text-muted mt-0"><%= current_user ? current_user.role.name_es || current_user.role.name : "" %></p>
+        <% if current_user %>
+          <%= link_to "Cerrar sesión", destroy_user_session_path,
+              data: { turbo_method: :delete }, class: 'btn btn-outline-primary' %>
+        <% else %>
+          <%= link_to "Iniciar sesión", new_user_session_path, class: 'btn btn-outline-primary' %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</aside>

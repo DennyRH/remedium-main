@@ -1,0 +1,40 @@
+
+<section class="loguear-container app-form-papper">
+  <div class="row " >
+    <h5 class="mb-5 mt-3 text-center">Regístrate</h5>
+    <div class="col-12">
+      <%= bootstrap_form_for(resource, as: resource_name, url: registration_path(resource_name),
+         data: {turbo: false}) do |f| %>
+        <%= render "devise/shared/error_messages", resource: resource %>
+
+        <div class="row">
+          <div class="col-12 col-md-12 col-lg-12 col-xl-12">
+            <%= f.text_field :name, autofocus: true, autocomplete: "off", required: true,
+              label: "Nombre de la Empresa" %>
+          </div>
+          <div class="col-12 col-md-12 col-lg-12 col-xl-12">
+            <%= f.email_field :email, autofocus: true, autocomplete: "off", label:"Email",
+              required: true, placeholder: "ejemplo@email.com" %>
+          </div>
+          <div class="col-12 col-md-12 col-lg-12 col-xl-12">
+            <%= f.password_field :password, autocomplete: "new-password", required: true, label: "Contraseña",
+              placeholder: "#{@minimum_password_length} caracteres mínimos" %>
+          </div>
+          <div class="col-12 col-md-12 col-lg-12 col-xl-12">
+            <%= f.password_field :password_confirmation, autocomplete: "new-password", required: true,
+              label: "Confirme su Contraseña" %>
+          </div>
+
+        </div>
+        <div class="row mb-2">
+          <div class="col-5 col-md-5 col-lg-5 col-xl-5">
+            <%= f.submit "Confirmar", class: "btn btn-primary" %>
+          </div>
+        </div>
+        <div class="mb-4 col-7 col-md-7 col-lg-7 col-xl-7">
+          <%= render "devise/shared/links" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>

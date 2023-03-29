@@ -1,0 +1,19 @@
+  <div class="col-6 mb-4">
+    <%= form_with url: send("searches_#{kind}s_path"),
+        method: :post, class: "purchase-search-products-form",
+        data: { customers_target: "formSearchCustomers" } do |form|
+    %>
+      <%= form.label t("customer.kind.search.#{kind}") %>
+      <%=
+        form.search_field :filter, id: "search-input",
+          class: "form-control purchase-search-input",
+          data: {
+            action: "input->customers#searchCustomers",
+            customers_target: "inputSearchCustomer"
+          }
+      %>
+    <% end %>
+  </div>
+  <div class="col-5 col-md-4 col-lg-3 col-xl-2 mt-4">
+    <%= link_to t("customer.kind.create.#{kind}"), send("new_#{kind}_path"), class: "btn btn-primary mb-4" %>
+  </div>

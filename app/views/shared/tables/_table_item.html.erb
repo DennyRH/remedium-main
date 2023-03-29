@@ -1,0 +1,47 @@
+<div class="table-responsive">
+    <table class="table table-striped table-hover table-warehouse-items">
+      <caption>Total Items: <%= items.count %></caption>
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Código</th>
+          <th scope="col" class="min-width-2">Nombre</th>
+          <th scope="col" class="min-width-4">Descripción</th>
+          <th scope="col">Costo lista</th>
+          <th scope="col">Costo Unidad</th>
+          <th scope="col">Costo Paq./Caja</th>
+          <th scope="col">P.Venta Paq./Caja</th>
+          <th scope="col">P.Venta Unidad</th>
+          <th scope="col">Total Stock</th>
+          <th scope="col">Total Paq./Caja</th>
+          <th scope="col">Min. Stock</th>
+          <th scope="col">Max. Stock</th>
+          <th scope="col">Nombre Genérico</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% items.each do |obj| %>
+          <% redirect_id = warehouse_item_path(@warehouse, obj) %>
+          <tr
+            id="<%= redirect_id %>" class="cursor-pointer"
+            data-action="click->item#redirectItemShow"
+          >
+            <th id="<%= redirect_id %>" scope="row"><%= obj.id %></th>
+            <td id="<%= redirect_id %>"><%= obj.product&.code || obj.product&.import_id || obj.product&.alternative_code %></td>
+            <td id="<%= redirect_id %>" class="min-width-2"><%= obj.product&.name %></td>
+            <td id="<%= redirect_id %>" class="min-width-4"><%= obj.product&.description %></td>
+            <td id="<%= redirect_id %>"><%= obj.list_price %></td>
+            <td id="<%= redirect_id %>"><%= obj.purchase_cost_unit %></td>
+            <td id="<%= redirect_id %>"><%= obj.purchase_cost_package %></td>
+            <td id="<%= redirect_id %>"><%= obj.sale_price_package %></td>
+            <td id="<%= redirect_id %>"><%= obj.sale_price_unit %></td>
+            <td id="<%= redirect_id %>"><%= obj.total_stock %></td>
+            <td id="<%= redirect_id %>"><%= obj.quantity %></td>
+            <td id="<%= redirect_id %>"><%= obj.min_stock %></td>
+            <td id="<%= redirect_id %>"><%= obj.max_stock %></td>
+            <td id="<%= redirect_id %>"><%= obj.product&.generic_name %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>

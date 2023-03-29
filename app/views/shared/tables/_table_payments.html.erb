@@ -1,0 +1,42 @@
+<div class="table-responsive my-4">
+  <table class="table table-striped table-hover table-warehouse-items">
+    <caption>Cuentas por Pagar: <%= payments.count %></caption>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th scope="col" class="min-width-2">Fecha Compra</th>
+        <th scope="col" class="min-width-2">Fecha Límite</th>
+        <th scope="col" class="min-width-2">Total a Pagar</th>
+        <th scope="col" class="min-width-3">Proveedor</th>
+        <th scope="col" class="min-width-3">Realizado por</th>
+      </tr>
+    </thead>
+    <tbody data-controller="pending">
+      <% payments.each do |obj| %>
+        <% redirect_id = pos_session_transaktion_path(obj.pos_session, obj.id) %>
+        <tr
+          id="<%= redirect_id %>" class="cursor-pointer"
+          data-action="click->pending#redirectShowPending"
+        >
+          <td id="<%= redirect_id %>" scope="row"><%= obj.id %></td>
+          <td id="<%= redirect_id %>" class="min-width-2">
+            <%= obj.created_at.localtime.strftime("%d-%m-%Y %H:%M") %>
+          </td>
+          <th id="<%= redirect_id %>" class="min-width-2">
+            <%= obj.date_of_payment.strftime("%d-%m-%Y") %>
+          </th>
+          <td id="<%= redirect_id %>" class="min-width-2">
+            <%= obj.total %> <%= obj.pos_session.type_of_currency %>
+          </td>
+          <td id="<%= redirect_id %>" class="min-width-3">
+            <%= obj.customer.name %>
+          </td>
+          <td id="<%= redirect_id %>" class="min-width-3">
+            <%= obj.pos_session.user.short_name %>
+            (<%= obj.pos_session.user.role.name_es || obj.pos_session.user.role.name %>)
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

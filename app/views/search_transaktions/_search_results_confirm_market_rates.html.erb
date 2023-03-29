@@ -1,0 +1,9 @@
+<% market_rates.each do |obj| %>
+    <p
+      class="search-results-sales border-bottom"
+      data-action="click->market#selectMarketRates"
+      value="<%= { transaktion: obj, customer: obj.customer, pos_session: obj.pos_session }.to_json %>"
+    >
+      <%= obj.customer&.name %>
+    </p>
+<% end %>

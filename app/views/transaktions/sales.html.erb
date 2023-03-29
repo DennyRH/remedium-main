@@ -1,0 +1,191 @@
+<section class="purchases-container" data-controller="sales">
+  <div class="app-papper justify-content-center">
+    <div class="purchase-search-products row justify-content-between">
+      <div class="col-12 col-md-5">
+        <%= form_with url: search_sale_pos_session_transaktions_path(@pos_session),
+            method: :post, class: "purchase-search-products-form",
+            data: { sales_target: "formSearch" } do |form|
+        %>
+          <%= form.label "Buscar producto" %>
+          <%= form.hidden_field :search_in_warehouse_the_session, value: "true" %>
+          <%=
+            form.search_field :search_product, id: "search-input", autofocus: true,
+              class: "form-control purchase-search-input",
+              data: {
+                action: "input->sales#searchProduct",
+                sales_target: "inputSearchProduct"
+              }
+          %>
+        <% end %>
+      </div>
+      <div class="col-12 col-md-5">
+        <%=
+          form_with url: search_sale_pos_session_transaktions_path(@pos_session),
+            method: :post, class: "purchase-search-products-form",
+            data: { sales_target: "formSearchInOtherWarehouse" } do |form|
+        %>
+          <%= form.label "Buscar producto en otra sucursales" %>
+          <%= form.hidden_field :search_in_other_warehouse, value: "true" %>
+          <%= form.search_field :search_product, id: "search-input",
+              class: "form-control purchase-search-input",
+              data: {
+                action: "input->sales#searchProductInOtherWarehouse",
+                sales_target: "inputSearchProductInOtherWarehouse"
+              }
+          %>
+        <% end %>
+      </div>
+      <div
+        data-sales-target="searchResults"
+        class="col-12 search_results"
+        id="search_results_sales"
+      ></div>
+    </div>
+    <div class="table-responsive my-4">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th scope="col" class="min-width-4">Descripción</th>
+            <th scope="col">Unidades Caja</th>
+            <th scope="col">Precio Unitario</th>
+            <th scope="col">Precio Caja</th>
+            <th scope="col">Total Stock</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td data-sales-target="productDescription" class="min-width-4" scope="row"></td>
+            <td data-sales-target="unitPackage"></td>
+            <td data-sales-target="priceUnit"></td>
+            <td data-sales-target="pricePackage"></td>
+            <td data-sales-target="totalStock"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="purchase-item-transactions-form mt-4">
+      <%= form_with url: item_transactions_pos_session_transaktions_path(@pos_session),
+          data: { sales_target: "formAddItemTransaktionSales" }, remote: true,
+          method: :post do |form| %>
+        <input type="hidden" data-sales-target="subtotalProduct">
+        <input type="hidden" data-sales-target="qtyPerPackage">
+        <%= form.hidden_field :sales, value: 'true' %>
+        <%= form.hidden_field :qty_unit, data: { sales_target: "qtyUnitSale" } %>
+        <%= form.hidden_field :item_id, data: { sales_target: "itemId" } %>
+        <div class="row">
+          <div class="col-6 col-lg-3">
+            <%= form.label "Unidades" %>
+            <%=
+              form.number_field :unit_total,
+                class: "form-control purchase-item-transactions-input",
+                data: {
+                  action: "input->sales#sumSubtotalForUnits",
+                  sales_target: "unitTotalSale"
+                }
+            %>
+          </div>
+          <div class="col-6 col-lg-4 col-xl-3">
+            <%= form.label "Paquetes/Cajas" %>
+            <%=
+              form.number_field :qty_package,
+                class: "form-control purchase-item-transactions-input",
+                data: {
+                  action: "input->sales#sumSubtotalForPackage",
+                  sales_target: "qtyPackageSale"
+                }
+            %>
+          </div>
+          <div class="col-6 col-lg-3">
+            <%= form.label 'Subtotal Bs.' %>
+            <%= form.hidden_field :sub_total, step: '0.01',
+                class: "form-control", data: { sales_target: "subtotal" } %>
+            <div>
+              <p class="fw-bold h5 mt-2 d-inline-block" data-sales-target="subtotalSee">
+                0
+              </p>
+              <p class="fw-bold h5 mt-2 d-inline-block">
+                <%= @pos_session.type_of_currency %>
+              </p>
+            </div>
+          </div>
+          <div class="col-6 col-lg-2">
+            <button
+              type="button" data-action="click->sales#addItemTransaktionAndReset"
+              class="btn btn-outline-primary sale-align-button-item-transaktions-add"
+            >
+              Agregar
+            </button>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <div class="app-papper my-3" id="item_transactions_sales">
+    <%= render partial: "shared/tables/table_items_added_sales",
+        locals: { item_transactions: session[:item_transactions_sales] } %>
+  </div>
+  <div class="app-papper my-3">
+    <%=
+      form_with url: create_sale_pos_session_transaktions_path(@pos_session),
+        method: :post, class: "purchase-search-products-form" do |form|
+    %>
+      <%= form.hidden_field :pos_session_id, value: @pos_session.id,
+          data: { sales_target: "posSessionId" } %>
+      <%= form.hidden_field :type_transaktion, value: "Sales" %>
+      <%= form.hidden_field :customer_id, data: { sales_target: "customerIdSales" } %>
+      <%= form.hidden_field :total, step: '0.01', data: { sales_target: "totalSales" } %>
+      <div class="row">
+        <div class="col-6 col-md-4 my-2">
+          <%= form.label t('forms.models.customer.labels.nit') %>
+          <%=
+            form.number_field :document_number, class: "form-control",
+              data: {
+                action: "input->sales#searchBuyer",
+                sales_target: "inputSearchCustomer"
+              }
+          %>
+        </div>
+        <div class="col-6 col-md-4 my-2">
+          <%= form.label t('forms.models.customer.labels.social_reason') %>
+          <%= form.text_field :name, class: "form-control",
+              data: { sales_target: "socialReasonCustomerSales" } %>
+        </div>
+        <div class="col-6 col-md-4 my-2">
+          <%= form.label t('forms.models.customer.labels.email') %>
+          <%= form.text_field :email, class: "form-control",
+              data: { sales_target: "emailCustomerSales" } %>
+        </div>
+        <div class="col-6 col-md-4 my-2">
+          <%= form.label t('forms.models.transaktion.labels.description') %>
+          <%= form.text_field :description, class: "form-control" %>
+        </div>
+        <div class="col-6 col-md-4 my-2">
+          <%= form.label t('forms.models.transaktion.labels.money_received') %>
+          <%= form.number_field :money_received, class: "form-control",
+              step: '0.01', data: { action: "input->sales#sumTotalWithReceived", sales_target: 'sumTotalWithReceived' } %>
+        </div>
+        <div class="col-6 col-md-4 my-2">
+          <%= form.label t('forms.models.transaktion.labels.money_returned') %>
+          <%= form.hidden_field :money_returned, class: "form-control",
+              step: '0.01', data: { sales_target: "moneyReturnedSales" } %>
+          <div>
+            <p class="fw-bold h5 mt-2 d-inline-block" data-sales-target="moneyReturnedSalesSee">
+              0
+            </p>
+            <p class="fw-bold h5 mt-2 d-inline-block">
+              <%= @pos_session.type_of_currency %>
+            </p>
+          </div>
+        </div>
+        <div class="col-6 col-md-4 my-2">
+          <%= form.label t('forms.models.transaktion.labels.payment_method') %>
+          <%= form.select :payment_method, options_for_select(@payment_methods, 'Efectivo'),
+              class: "form-control" %>
+        </div>
+        <div class="col-6 col-md-4 mt-4 purchase-align-button-transaktion-new" >
+          <%= form.submit "Realizar Venta", class: "btn btn-primary btn-lg disabled", data: {sales_target: 'submitForm'} %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</section>

@@ -1,0 +1,131 @@
+<section class="app-papper warehouse-show-container row">
+  <div class="col-12 row mb-3">
+    <div class="col-10 col-md-11">
+      <h4 class="text-center fw-bold" ><%= @item.product.name %></h4>
+    </div>
+    <div class="col-2 col-md-1 text-end">
+      <% if policy(@item).edit? %>
+        <%= link_to edit_warehouse_item_path(@warehouse, @item) do %>
+          <i class="fa-solid fa-pen-to-square app-card-warehouse-icon fw-normal"></i>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+  <div class="warehouse-show-info col-12 col-md-6">
+    <div class="contenido">
+      <h5>Codigo: </h5>
+      <p><%= @item.code %></p>
+    </div>
+    <div class="contenido">
+      <h5>Nombre Genérico: </h5>
+      <p><%= @item.product.generic_name  %></p>
+    </div>
+    <div class="contenido">
+      <h5>Id del Item: </h5>
+      <p><%= @item.id %></p>
+    </div>
+    <div class="contenido">
+      <h5>Id del producto: </h5>
+      <p><%= @item.product_id %></p>
+    </div>
+    <div class="contenido">
+      <h5>sucursal: </h5>
+      <p><%= @item.warehouse_id %></p>
+    </div>
+    <div class="contenido">
+      <h5>Estado: </h5>
+      <p><%= @item.status %></p>
+    </div>
+    <div class="contenido">
+      <h5>Fecha de Elaboracion </h5>
+      <p><%= @item.date_of_elaboration %></p>
+    </div>
+    <div class="contenido">
+      <h5>Fecha de Vencimiento: </h5>
+      <p><%= @item.expiration_date %></p>
+    </div>
+  </div>
+  <div class="warehouse-show-info col-12 col-md-6">
+    <div class="contenido">
+      <h5>Minimo Stock: </h5>
+      <p><%= @item.min_stock %></p>
+    </div>
+    <div class="contenido">
+      <h5>Maximo Stock: </h5>
+      <p><%= @item.max_stock %></p>
+    </div>
+    <div class="contenido">
+      <h5>Total Stock: </h5>
+      <p><%= @item.total_stock %></p>
+    </div>
+    <div class="contenido">
+      <h5>Cantidad Paquete/Caja:  </h5>
+      <p><%= @item.quantity%></p>
+    </div>
+    <div class="contenido">
+      <h5>Costo Unidad: </h5>
+      <p><%= @item.purchase_cost_unit %></p>
+    </div>
+    <div class="contenido">
+      <h5>Costo Paquete/Caja: </h5>
+      <p><%= @item.purchase_cost_package %></p>
+    </div>
+    <div class="contenido">
+      <h5>Precio lista: </h5>
+      <p><%= @item.list_price  %></p>
+    </div>
+    <div class="contenido">
+      <h5>Precio venta Unidad: </h5>
+      <p><%= @item.sale_price_unit %></p>
+    </div>
+    <div class="contenido">
+      <h5>Precio venta Paquete/Caja: </h5>
+      <p><%= @item.sale_price_package %></p>
+    </div>
+    <div class="contenido">
+      <h5>Creado el: </h5>
+      <p><%= @item.created_at.localtime.strftime("%Y-%m-%d %H:%M") %></p>
+    </div>
+    <% if @item.created_at != @item.updated_at %>
+      <div class="contenido">
+        <h5>Modificado el: </h5>
+        <p><%= @item.updated_at.localtime.strftime("%Y-%m-%d %H:%M") %></p>
+      </div>
+    <% end %>
+  </div>
+</section>
+<section class="app-papper warehouse-show-container row my-4">
+  <div class="col-12">
+    <h3 class="fw-bold text-center">Kardex</h3>
+  </div>
+  <div class="col-12" data-controller="item">
+    <%=
+      form_with url: warehouse_item_path(@warehouse, @item),
+        method: :get, class: "purchase-search-products-form",
+        data: { item_target: "formFilterKardex" } do |form|
+    %>
+      <div class="row justify-content-between mb-3">
+        <div class="col-5 col-md-4 col-lg-3">
+          <%= form.label "Filtrar Desde" %>
+          <%= form.date_field :start_date, value: params[:start_date], class: "form-control ",
+                data: { action: "change->item#sendFilterKardex" } %>
+        </div>
+        <div class="col-5 col-md-4 col-lg-3">
+          <%= form.label "Hasta" %>
+          <%= form.date_field :end_date, value: params[:end_date], class: "form-control ",
+                data: { action: "change->item#sendFilterKardex" } %>
+        </div>
+        <div class="col-1">
+          <%= link_to warehouse_item_path(@warehouse, @item), class: "mt-4 btn btn-secondary" do %>
+            <i class="fa-solid fa-arrow-rotate-right"></i>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <div class="col-12">
+    <%= render partial: 'shared/tables/table_kardex',
+          locals: { item_transaktions: @item_transaktions } %>
+    <%= render partial: 'shared/pagination', locals: { records_pagination: @item_transaktions } %>
+  </div>
+</section>

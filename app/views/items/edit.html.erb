@@ -1,0 +1,171 @@
+<section
+  class="row justify-content-center align-items-center app-papper mt-4"
+  data-controller="item"
+>
+  <div class="col-12">
+    <input
+      type="hidden"
+      id="totalUnitsProductInItem"
+      value=<%= @item.product.total_unit %>
+
+    >
+    <% if current_user.owner? %>
+      <div class="mb-4">
+        <p for="checkbox" class="form-check-label my-1">
+          <b>Guardar Cambios en la Sucursal: </b>
+        </p>
+        <div class="row">
+          <div class="col-6 d-inline-block">
+            <input
+              type="checkbox" class="form-check-input my-2"
+              data-item-target="checkboxitemEditOne" checked
+              data-action="change->item#currentWarehouseSelect"
+            >
+            <label for="checkbox" class="form-check-label my-1">
+              Actual
+            </label>
+          </div>
+          <div class="col-6 d-inline-block">
+            <input
+              type="checkbox" class="form-check-input my-2"
+              data-item-target="checkboxitemEditAll"
+              data-action="change->item#allWarehouseSelect"
+            >
+            <label for="checkbox" class="form-check-label my-1">
+              Todas
+            </label>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <div class="col-12">
+    <%= form_for([@warehouse, @item]) do |f| %>
+      <div class="row">
+        <input
+          type="hidden" class="form-check-input my-2"
+          data-item-target="warehouseEditContextItem" value="Current Warehouse"
+          name="warehouse_edit_context" id="warehouse_edit_context"
+        >
+        <div class="col-6 col-md-4 my-2">
+          <%= f.label "Total Stock" %>
+          <%= f.number_field :total_stock, class: "form-control",
+              data: {
+                item_target: "totalStockItemForm",
+                action: "input->item#setTotalStockItem"
+              }
+          %>
+        </div>
+        <div class="col-6 col-md-4 my-2">
+          <%= f.label "Cantidad Paquete/Caja" %>
+          <%= f.text_field :quantity, class: "form-control",
+                data: {
+                  item_target: "quantityPackageItemForm",
+                  action: "input->item#setQtyPackageItem"
+                }
+          %>
+        </div>
+        <div class="col-4 my-2">
+          <%= f.label "Min Stock" %>
+          <%= f.number_field :min_stock, class: "form-control" %>
+        </div>
+        <div class="col-4 my-2">
+          <%= f.label "Max Stock" %>
+          <%= f.number_field :max_stock, class: "form-control" %>
+        </div>
+        <div class="col-6 col-md-4 my-2">
+          <%= f.label "Fecha elaboración" %>
+          <%= f.date_field :date_of_elaboration, class: "form-control" %>
+        </div>
+        <div class="col-6 col-md-4 my-2">
+          <%= f.label "Fecha Vencimiento" %>
+          <%= f.date_field :expiration_date, class: "form-control"%>
+        </div>
+        <div class="col-6 col-md-4 my-2">
+          <%= f.label "Código" %>
+          <%= f.text_field :code, class: "form-control" %>
+        </div>
+        <div class="col-12 my-4 row">
+          <div class="col-12 col-lg-6 my-2">
+            <%= f.label "Precio de Lista" %>
+            <div class="input-group">
+              <%= f.number_field :list_price, step: '0.01', class: "form-control",
+                  data: {
+                    action: "input->item#setPriceListItem",
+                    item_target: "listPriceItem"
+                  }
+              %>
+              <input
+                type="number" placeholder="Descuento"
+                class="form-control mx-2" data-item-target="listPriceDiscountItem"
+              >
+              <i class="fa-solid fa-percent mt-2"></i>
+              <div class="input-group-append">
+                <button
+                  class="btn btn-outline-secondary mx-2" id="basic-addon2"
+                  data-action="click->item#calculateDiscountListPrice" type="button"
+                >
+                  Calcular
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-md-6 col-lg-3 my-2">
+            <%= f.label "Costo Unidad" %>
+            <%= f.number_field :purchase_cost_unit, step: '0.01',
+                class: "form-control", data: { item_target: "purchaseCostUnitItem" } %>
+          </div>
+          <div class="col-6 col-md-6 col-lg-3 my-2">
+            <%= f.label "Costo Paq/Caja" %>
+            <%= f.number_field :purchase_cost_package, step: '0.01',
+                class: "form-control", data: { item_target: "purchaseCostPackageItem" } %>
+          </div>
+          <div class="col-12 col-lg-6 my-2">
+            <%= f.label "Precio venta Paquete" %>
+            <div class="input-group">
+              <%= f.number_field :sale_price_package, step: '0.01',
+                  class: "form-control", data: { item_target: "salePricePackageItem" }
+              %>
+              <input
+                type="number" class="form-control mx-2"
+                placeholder="Aumento" data-item-target="salePricePackagePercentItem"
+              >
+              <i class="fa-solid fa-percent mt-2"></i>
+              <div class="input-group-append">
+                <button
+                  class="btn btn-outline-secondary mx-2" id="basic-addon2"
+                  data-action="click->item#calculatePricePackage" type="button"
+                >
+                  Calcular
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-lg-6 my-2">
+            <%= f.label "Precio venta Unidad" %>
+            <div class="input-group">
+              <%= f.number_field :sale_price_unit, step: '0.01',
+                  class: "form-control", data: { item_target: "salePriceUnitItem" } %>
+              <input
+                type="number" class="form-control mx-2"
+                placeholder="Aumento" data-item-target="salePriceUnitPercentItem"
+              >
+              <i class="fa-solid fa-percent mt-2"></i>
+              <div class="input-group-append">
+                <button
+                  class="btn btn-outline-secondary mx-2" id="basic-addon2"
+                  data-action="click->item#calculatePriceUnit" type="button"
+                >
+                  Calcular
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-6 col-md-4">
+          <%= f.submit "Guardar Cambios", class: "btn btn-primary" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</section>

@@ -1,0 +1,61 @@
+<div class="table-responsive" data-controller="products">
+  <table class="table table-striped table-hover table-warehouse-items">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col" class="min-width-1">Fecha</th>
+        <th scope="col">Tipo</th>
+        <th scope="col" class="min-width-2">Responsable</th>
+        <th scope="col" class="min-width-2">Receptor</th>
+        <th scope="col">Total Entrada</th>
+        <th scope="col">Total Salida</th>
+        <th scope="col">Saldo</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% item_transaktions.each do |obj| %>
+        <% transaktion = obj.transaktion %>
+        <% path = pos_session_transaktion_path(transaktion.pos_session.id, transaktion.id) %>
+        <tr
+          class="cursor-pointer <%= transaktion.status == 'annulled' ? 'transaktion-annulled' : '' %>"
+          id="<%= path %>" data-action="click->products#redirectShowProduct"
+        >
+          <th id="<%= path %>" scope="row"><%= transaktion.id %></th>
+          <td id="<%= path %>" class="min-width-1">
+            <%= transaktion.created_at.localtime.strftime("%Y-%m-%d %H:%M") %>
+          </td>
+          <td id="<%= path %>"><%= transaktion.type_transaktion_es %></td>
+          <td id="<%= path %>" class="min-width-2">
+            <%= transaktion.pos_session.user.full_name %>
+          </td>
+          <td id="<%= path %>" class="min-width-2">
+            <% if transaktion.transfer? %>
+              <%= transaktion.receiver_pos_session.user.full_name %>
+            <% else %>
+              <%=  transaktion.customer&.name %>
+            <% end %>
+          </td>
+          <td id="<%= path %>">
+            <% if (transaktion.purchase? || transaktion.purchase_credit?) && transaktion.active? %>
+              <%= obj.qty %>
+            <% elsif (transaktion.sale? || transaktion.market_rate? || transaktion.transfer?) && transaktion.annulled? %>
+              <%= obj.qty %>
+            <% else %>
+              0
+            <% end %>
+          </td>
+          <td id="<%= path %>">
+            <% if (transaktion.sale? || transaktion.market_rate? || transaktion.transfer?) && transaktion.active? %>
+              <%= obj.qty %>
+            <% elsif (transaktion.purchase? || transaktion.purchase_credit?) && transaktion.annulled? %>
+              <%= obj.qty %>
+            <% else %>
+              0
+            <% end %>
+          </td>
+          <td id="<%= path %>"><%= obj.stock_at %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

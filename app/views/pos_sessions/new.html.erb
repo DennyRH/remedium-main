@@ -1,0 +1,33 @@
+<section class="user-form-container app-form-papper">
+  <div class="row">
+    <h5 class="mt-3 mb-5 text-center">Apertura de Caja</h5>
+    <div class="col-12">
+      <%= bootstrap_form_for(@pos_session) do |f| %>
+        <div class="row" >
+          <%= f.hidden_field :initial_balance, value: 0 %>
+          <div class="col-12 col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+            <%= f.number_field :petty_cash, label: t('forms.models.pos_session.labels.petty_cash'), append: 'Bs.', autofocus: true %>
+          </div>
+          <div class="col-12 col-md-6 col-lg-6 col-xl-6">
+            <%= f.select :warehouse_id, options_for_select(@warehouse_ids),
+                  required: true, prompt: 'Elegir' , option_class: "select",
+                  label: t('forms.models.pos_session.labels.warehouse_select') %>
+          </div>
+          <div class="col-12 col-md-6 col-lg-6 col-xl-6">
+            <%= f.select :type_of_currency,
+                  options_for_select([['Bolivianos', 'Bs'], ['Dolares USD', '$us']]), required: true,
+                 option_class: "select", label: t('forms.models.pos_session.labels.type_of_currency') %>
+          </div>
+          <div class="col-12 col-md-6 col-lg-6 col-xl-6">
+            <%= f.text_field :observation, label: t('forms.models.pos_session.labels.observation') %>
+          </div>
+        <div class="row">
+          <div class="col-4 col-md-4 col-lg-4 col-xl-4 mb-4 mt-1">
+            <%= f.submit "Abrir Caja", class: "btn btn-primary" %>
+          </div>
+        </div>
+
+      <% end %>
+    </div>
+  </div>
+</section>

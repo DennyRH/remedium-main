@@ -1,0 +1,37 @@
+<section class="row justify-content-center align-items-center account-show-edit-container">
+  <div class="app-papper account-show-edit-form col-12 col-sm-10 col-md-6 col-lg-5 my-3">
+    <%= bootstrap_form_for(@account) do |f| %>
+      <%= f.text_field :name,
+            label: t('forms.models.account.labels.name') %>
+      <%= f.text_field :address,
+            label: t('forms.models.account.labels.address') %>
+      <%= f.text_field :email,
+            label: t('forms.models.account.labels.email') %>
+      <%= f.text_field :nit,
+            label: t('forms.models.account.labels.nit') %>
+      <%= f.text_field :social_reason,
+            label: t('forms.models.account.labels.social_reason') %>
+      <%= f.text_field :municipality,
+            label: t('forms.models.account.labels.municipality') %>
+      <%= f.text_field :sector_type_document,
+            label: t('forms.models.account.labels.sector_type_document') %>
+      <%= f.text_field :invoice_type,
+            label: t('forms.models.account.labels.invoice_type') %>
+      <%= f.text_field :phone,
+            label: t('forms.models.account.labels.phone') %>
+      <%= f.text_field :bussiness_type,
+            label: t('forms.models.account.labels.bussiness_type') %>
+      <%= f.text_field :type_of_taxpayer,
+            label: t('forms.models.account.labels.type_of_taxpayer') %>
+      <%= f.text_field :economic_activity,
+            label: t('forms.models.account.labels.economic_activity') %>
+      <%= f.submit "Guardar Cambios", class: "btn btn-primary" %>
+    <% end %>
+    <%= link_to "Eliminar", account_path(@account),
+        data: {
+          turbo_method: :delete,
+          turbo_confirm: "Estas seguro de Eliminar la Cuenta #{@account.name}"
+        },
+        class: "btn btn-outline-danger mt-3" %>
+  </div>
+</section>

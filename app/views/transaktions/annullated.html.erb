@@ -1,0 +1,16 @@
+<%= turbo_frame_tag "modal_annullated_transaktion" do %>
+  <section id="myModal2" class="modal2">
+    <div class="modal-content2">
+      <h2>Anular <%= @transaktion.type_transaktion_es %></h2>
+      <div class="my-4">
+        <%=
+          render partial: "shared/forms/form_annullated_transaktion",
+            locals: {
+              transaktion: @transaktion, pos_session: @pos_session,
+              pos_sessions_active: @pos_sessions_active
+            }
+        %>
+      </div>
+    </div>
+  </section>
+<% end %>

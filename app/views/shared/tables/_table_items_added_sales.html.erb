@@ -1,0 +1,64 @@
+<div class="table-responsive">
+  <table class="table table-striped table-hover table-warehouse-items">
+    <caption>Total registros: <%= item_transactions.count %></caption>
+    <thead>
+      <tr>
+        <th scope="col">Código</th>
+        <th scope="col" class="min-width-4">Descripción</th>
+        <th scope="col">Unidades</th>
+        <th scope="col">Cajas</th>
+        <th scope="col">Precio</th>
+        <th scope="col">Precio Caja</th>
+        <th scope="col">Total Unidades</th>
+        <th scope="col">Subtotal</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% total_mount = 0 %>
+      <% item_transactions.each do |obj| %>
+        <% item = Item.find(obj["item_id"]) %>
+        <% total_mount += obj["sub_total"].to_f %>
+        <tr>
+          <td><%= item.code %></td>
+          <td class="min-width-4" data-sales-target="itemDescription"><%= item.product.description %></td>
+          <td><%= obj["qty_unit"] %></td>
+          <td><%= obj["qty_package"] %></td>
+          <td><%= item.sale_price_unit %></td>
+          <td><%= item.sale_price_package %></td>
+          <td><%= obj["unit_total"] %></td>
+          <td><%= obj["sub_total"] %></td>
+          <td>
+            <%= link_to "/pos_sessions/#{@pos_session.id}/transaktions/delete/#{obj["item_id"]}?sales=true",
+              data: { turbo_method: :delete, turbo_confirm: "Estas seguro de eliminar?" } do %>
+              <i class="fa fa-trash" color="black" aria-hidden="true"></i>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+      <tr>
+        <td scope="row" colspan="6">
+          <%=
+            link_to "Borrar Todo", "/pos_sessions/#{@pos_session.id}/transaktions/delete_all?sales=true",
+              class: "text-decoration-none",
+              data: {
+                turbo_method: :delete,
+                turbo_confirm: "Estas seguro de eliminar todo?"
+              }
+          %>
+        </td>
+        <th colspan="3">
+          <span class="mx-2">
+            Total:
+          </span>
+          <span class="h5 fw-bold" data-sales-target="sumTotalItemTransactions">
+            <%= total_mount.round(2) %>
+          </span>
+          <span class="h5 fw-bold">
+            <%= @pos_session.type_of_currency %>
+          </span>
+        </th>
+      </tr>
+    </tbody>
+  </table>
+</div>

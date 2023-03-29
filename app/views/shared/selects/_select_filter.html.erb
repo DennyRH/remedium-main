@@ -1,0 +1,8 @@
+<div class=<%= container_class %>>
+  <label><%= label_select %></label>
+  <select data-action=<%= action %>>
+    <% filters.each do |arr| %>
+      <option value="<%= arr[1] %>"><%= arr[0] %></option>
+    <% end %>
+  </select>
+</div>

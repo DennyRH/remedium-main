@@ -1,0 +1,34 @@
+<section class="warehouse-container app-form-papper">
+  <div class="row " >
+    <h5 class="mb-3 mt-4 text-center">Crear Sucursal</h5>
+    <div class="col-12">
+      <%= bootstrap_form_with(model: @warehouse) do |f| %>
+        <%= render partial: 'shared/forms/errors', locals: { object: @warehouse } %>
+        <div class="row">
+          <div class="col-12 col-md-12 col-lg-12 col-xl-12">
+            <%= f.text_field :name, label: "Nombre" %>
+          </div>
+          <%= f.fields_for :warehouse_detail do |form|%>
+            <div class="col-12 col-md-12 col-lg-12 col-xl-12">
+              <%= form.text_field :address, label: "Dirección" %>
+            </div>
+            <div class="col-12 col-md-12 col-lg-12 col-xl-12">
+              <%= form.text_field :municipality, label: "Ciudad / Municipio" %>
+            </div>
+            <div class="col-12 col-md-12 col-lg-12 col-xl-12">
+              <%= form.number_field :branch_code, label: "Código de Sucursal" %>
+            </div>
+            <div class="col-12 col-md-12 col-lg-12 col-xl-12">
+              <%= form.text_field :nit, label: "NIT" %>
+            </div>
+          <% end %>
+        </div>
+        <div class="row">
+          <div class="mb-5 mt-2 col-4 col-md-4 col-lg-4 col-xl-4">
+            <%= f.submit "Crear Sucursal", class: "btn btn-primary" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>

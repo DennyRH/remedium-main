@@ -1,0 +1,9 @@
+<section class="pos-session-show-container">
+  <div class="pos-session-info-container">
+    <% if @pos_session.status == 'validating' %>
+      <%= render 'render_show_validating', locals: { pos_session: @pos_session } %>
+    <% else %>
+      <%= render 'render_show_active', locals: { pos_session: @pos_session } %>
+    <% end %>
+  </div>
+</section>

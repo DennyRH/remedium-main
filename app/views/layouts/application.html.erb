@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Remedium</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "custom_application", "data-turbo-track": "reload" %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;400;500;600;700&display=swap" rel="stylesheet">
+  </head>
+
+  <body>
+    <main>
+      <%= render "shared/sidebar" if current_user %>
+      <article class="app-render">
+        <div class="<%= "padding-sidebar" if current_user %>">
+          <div class="app__breadcrumbs_style">
+            <%= render_breadcrumbs tag: :p, separator: "<i class='fa-solid fa-chevron-right mx-3'></i>" %>
+          </div>
+          <%= render "shared/flash" %>
+          <%= yield %>
+        </div>
+        <%= turbo_frame_tag "modal_create_product" %>
+        <%= turbo_frame_tag "modal_confirm_market_rates" %>
+        <%= turbo_frame_tag "modal_confirm_transfer" %>
+        <%= turbo_frame_tag "modal_annullated_transaktion" %>
+        <%= turbo_frame_tag "modal_paying_transaktion" %>
+        <%= turbo_frame_tag "modal_new_provider" %>
+      </article>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,115 @@
+<section class="app-papper warehouse-show-container row">
+  <div class="col-12">
+    <h4>
+      <span class="badge bg-<%= @badge_type %>">
+        <%= @transaktion.status_es %>
+      </span>
+    </h4>
+  </div>
+  <div class="warehouse-show-info col-12 col-md-6">
+    <h5>
+      <span>Usuario: </span>
+      <%= @transaktion.pos_session.user.full_name %>
+      (<%= @transaktion.pos_session.user.role.name_es || @transaktion.pos_session.user.role.name %>)
+    </h5>
+    <h5>
+      <span>Cliente/Proveedor: </span>
+      <%= @transaktion.customer&.name %>
+    </h5>
+    <h5>
+      <span>Total: </span>
+      <span><%= @transaktion.total %></span>
+      <%= @transaktion.pos_session.type_of_currency %>
+    </h5>
+    <% if @transaktion.money_received %>
+      <h5>
+        <span>Dinero Recibido: </span>
+        <%= @transaktion.money_received %> <%= @transaktion.pos_session.type_of_currency %>
+      </h5>
+    <% end %>
+    <% if @transaktion.money_returned %>
+      <h5>
+        <span>Cambio: </span>
+        <%= @transaktion.money_returned %> <%= @transaktion.pos_session.type_of_currency %>
+      </h5>
+    <% end %>
+    <% if @transaktion.money_paid %>
+      <h5>
+        <span>Dinero Pagado: </span>
+        <%= @transaktion.money_paid %> <%= @transaktion.pos_session.type_of_currency %>
+      </h5>
+    <% end %>
+    <% if @transaktion.payment_method %>
+      <h5><span>Metodo de Pago: </span><%= @transaktion.payment_method %></h5>
+    <% end %>
+    <% if @transaktion.discount %>
+      <h5><span>Descuento: </span> <%= @transaktion.discount %></h5>
+    <% end %>
+  </div>
+  <div class="warehouse-show-info col-12 col-md-6">
+    <h5><span>Tipo de transacción: </span> <%= @transaktion.type_transaktion_es %></h5>
+    <h5><span>Observación: </span> <%= @transaktion.description %></h5>
+    <% if @transaktion.code %>
+      <h5><span>Código: </span> <%= @transaktion.code %></h5>
+    <% end %>
+    <% if @transaktion.date_of_payment %>
+      <h5>
+        <span>Fecha límite de pago: </span>
+        <%= @transaktion.date_of_payment.strftime("%Y-%m-%d") %>
+      </h5>
+    <% end %>
+    <h5>
+      <span>Fecha de Creación: </span>
+      <%= @transaktion.created_at.localtime.strftime("%Y-%m-%d %H:%M") %>
+    </h5>
+    <% if @transaktion.created_at !=  @transaktion.updated_at %>
+      <h5>
+        <span>Fecha de Modificación: </span>
+        <%= @transaktion.updated_at.localtime.strftime("%Y-%m-%d %H:%M") %>
+      </h5>
+    <% end %>
+    <% if @transaktion.destination_warehouse_id %>
+      <h5>
+        <span>Enviado a la Sucursal: </span>
+        <%= @transaktion.destination_warehouse.name %>
+        <%= @transaktion.destination_warehouse.warehouse_detail.address %>
+      </h5>
+    <% end %>
+    <% if @transaktion.receiver_pos_session_id %>
+      <h5>
+        <span>
+          <%= @transaktion.status == 'annulled' ? 'Anulado Por: ' : 'Recibido por: ' %>
+        </span>
+        <%= @transaktion.receiver_pos_session.user.full_name %>
+        (<%= @transaktion.receiver_pos_session.user.role.name_es || @transaktion.receiver_pos_session.user.role.name %>)
+      </h5>
+    <% end %>
+  </div>
+  <% if @transaktion.status == 'active' && current_user.owner_or_admin? %>
+    <div class="col-6 col-md-4">
+      <%=
+        link_to "Anular #{@transaktion.type_transaktion_es}",
+          pos_session_transaktion_annullated_path(@pos_session.id, @transaktion.id),
+          class: "btn btn-outline-primary purchases-button-create-product",
+          data: { turbo_frame: "modal_annullated_transaktion" }
+      %>
+    </div>
+  <% end %>
+  <% if @transaktion.type_transaktion == 'Purchases Credit' && @transaktion.status == 'pending' && current_user.owner_or_admin? %>
+    <div class="col-6 col-md-4">
+      <%=
+        link_to "Pagar #{@transaktion.type_transaktion_es}",
+          pos_session_transaktion_paying_path(@pos_session.id, @transaktion.id),
+          class: "btn btn-outline-primary purchases-button-create-product",
+          data: { turbo_frame: "modal_paying_transaktion" }
+      %>
+    </div>
+  <% end %>
+</section>
+<section class="app-papper warehouse-show-container row my-4">
+  <div class="col-12">
+    <%= render partial: 'shared/tables/table_item_transaction',
+          locals: { item_transactions: @item_transactions } %>
+    <%= render partial: 'shared/pagination', locals: { records_pagination: @item_transactions } %>
+  </div>
+</section>

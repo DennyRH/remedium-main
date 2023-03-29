@@ -1,0 +1,27 @@
+<section class="app-papper row justify-content-between" data-controller="warehouses">
+  <% if policy(Warehouse).new? %>
+    <div class="col-6 col-md-5 mb-4">
+      <%= form_with url: search_warehouses_warehouses_path,
+          method: :post, class: "purchase-search-products-form",
+          data: { warehouses_target: "formSearchWarehouses" } do |form|
+      %>
+        <%= form.label "Buscar Sucursal" %>
+        <%=
+          form.search_field :search_warehouses, id: "search-input",
+            class: "form-control purchase-search-input",
+            data: {
+              action: "input->warehouses#searchWarehouses",
+              warehouses_target: "inputSearchWarehouses"
+            }
+        %>
+      <% end %>
+    </div>
+    <div class="col-5 col-md-4 col-lg-3">
+      <%= link_to "Crear Sucursal", new_warehouse_path, class: "btn btn-primary mt-4" %>
+    </div>
+  <% end %>
+  <div class="col-12" id="search_results_warehouses_index">
+    <%= render partial: 'shared/cards/card_warehouse', locals: { warehouses: @warehouses} %>
+    <%= render partial: 'shared/pagination', locals: { records_pagination: @warehouses } %>
+  </div>
+</section>

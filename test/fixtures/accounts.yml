@@ -1,0 +1,35 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  nit: MyString
+  phone: MyString
+  email: MyString
+  digital_certificate: MyText
+  private_key: MyText
+  municipality: MyString
+  sector_type_document: MyString
+  address: MyString
+  invoice_type: MyString
+  bussiness_type: MyString
+  type_of_taxpayer: MyString
+  economic_activity: MyString
+  social_reason: MyString
+  branch_code: 1
+
+two:
+  name: MyString
+  nit: MyString
+  phone: MyString
+  email: MyString
+  digital_certificate: MyText
+  private_key: MyText
+  municipality: MyString
+  sector_type_document: MyString
+  address: MyString
+  invoice_type: MyString
+  bussiness_type: MyString
+  type_of_taxpayer: MyString
+  economic_activity: MyString
+  social_reason: MyString
+  branch_code: 1

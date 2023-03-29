@@ -1,0 +1,45 @@
+
+<section class="user-form-container app-form-papper">
+  <div class="row " >
+    <h5 class="mb-4 mt-4 text-center">Editar Usuario</h5>
+    <div class="col-12">
+      <%= bootstrap_form_with(model:@user, url: users_admin_path(@user)) do |f| %>
+        <%= render partial: 'shared/forms/errors', locals: { object: @user } %>
+        <div class="row">
+          <div class="col-12 col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+            <%= f.text_field :name, label: "Nombre" %>
+          </div>
+          <div class="col-12 col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+            <%= f.text_field :last_name, label: "Apellido" %>
+          </div>
+          <div class="col-12 col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+            <%= f.text_field :email, label: "Email" %>
+          </div>
+          <div class="col-12 col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+            <%= f.password_field :password, label: "Contraseña" %>
+          </div>
+          <div class="col-12 col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+            <%= f.text_field :ci, label: "CI" %>
+          </div>
+          <div class="col-12 col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+             <%= f.select :role_id, options_for_select(@rol_ids, @user.role.id), label:"Cargo:", class: "select" %>
+          </div>
+        </div>
+        <div class="row justify-content-between">
+          <div class="col-8 col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 mb-4 mt-3">
+            <%= f.submit "Guardar Cambios", class: "btn btn-primary " %>
+          </div>
+          <div class="col-8 col-xs4 col-sm-4 col-md-4 col-lg-4 col-xl-4 mb-4 mt-3">
+            <%= link_to "Eliminar", users_admin_path(@user),
+              data: {
+                turbo_method: :delete,
+                turbo_confirm: "Estas seguro de Eliminar el Usuario #{@user.full_name}"
+              },
+              class: "btn btn-outline-danger " %>
+          </div>
+        </div>
+
+      <% end %>
+    </div>
+  </div>
+</section>

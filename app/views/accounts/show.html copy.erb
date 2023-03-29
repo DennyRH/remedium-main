@@ -1,0 +1,60 @@
+<section class="account-show-container">
+
+  <div class="row justify-content-center">
+    <div class="app-papper account-details col-12 col-md-8 col-lg-7">
+      <h3 class="my-4 text-center">Detalles de la cuenta</h3>
+      <div class="contenido">
+        <p>Nombre de la empresa: </p>
+        <h5><%= @account.name %></h5>
+      </div>
+      <div class="contenido">
+        <p>Email: </p>
+        <h5><%= @account.email %></h5>
+      </div>
+      <div class="contenido">
+        <p>Dirección: </p>
+        <h5><%= @account.address %></h5>
+      </div>
+      <div class="contenido">
+        <p>NIT: </p>
+        <h5><%= @account.nit %></h5>
+      </div>
+      <div class="contenido">
+        <p>Celular: </p>
+        <h5><%= @account.phone %></h5>
+      </div>
+      <div class="contenido">
+        <p>Municipio: </p>
+        <h5><%= @account.municipality %></h5>
+      </div>
+      <div class="contenido">
+        <p>Tipo de documento sector: </p>
+        <h5><%= @account.sector_type_document %></h5>
+      </div>
+      <div class="contenido">
+        <p>Tipo de factura: </p>
+        <h5><%= @account.invoice_type %></h5>
+      </div>
+      <div class="contenido">
+        <p>Tipo de negocio: </p>
+        <h5><%= @account.bussiness_type %></h5>
+      </div>
+      <div class="contenido">
+        <p>Tipo de contribuyente: </p>
+        <h5><%= @account.type_of_taxpayer %></h5>
+      </div>
+      <div class="contenido">
+        <p>Actividad economica: </p>
+        <h5><%= @account.economic_activity %></h5>
+      </div>
+      <div class="contenido">
+        <p>Razón social: </p>
+        <h5><%= @account.social_reason %></h5>
+      </div>
+      <% if policy(@account).edit? %>
+        <%= link_to "Editar", edit_account_path(@account),
+            class: "btn btn-outline-primary my-3" %>
+      <% end %>
+    </div>
+  </div>
+</section>

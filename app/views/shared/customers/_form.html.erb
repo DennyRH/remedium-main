@@ -1,0 +1,14 @@
+<%= bootstrap_form_with model: obj do |f| %>
+  <%= render partial: 'shared/forms/errors', locals: { object: obj } %>
+  <%= f.text_field :name, required: true %>
+  <%= f.email_field :email, required: true %>
+  <div class="row" >
+    <div class="col" >
+      <%= f.text_field :document_number, required: true %>
+    </div>
+    <div class="col" >
+      <%= f.text_field :phone %>
+    </div>
+  </div>
+  <%= f.submit t("customer.kind.#{action}.#{kind}"), class: "btn btn-primary" %>
+<% end %>

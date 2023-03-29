@@ -1,0 +1,29 @@
+<div id="confirm_transfer" data-controller="transfer">
+  <div>
+    <%=
+      form_with url: pos_session_transaktion_path(@pos_session, 0),
+                method: :put,
+                data: { turbo_frame: "_top", transfer_target: "formUpdateConfirmTransfer" },
+                class: "purchase-search-products-form" do |form|
+    %>
+      <div class="row">
+        <%= form.hidden_field :receiver_pos_session_id, value: @pos_session.id %>
+        <div  class="col-6 col-md-4 my-2">
+          <%= form.label "ID" %>
+          <%= form.number_field :id, class: "form-control", data: { action: "input->transfer#setTransferId" } %>
+        </div>
+        <div class="col-6 col-md-4 my-2">
+          <%= form.label "Observación" %>
+          <%= form.text_field :description, class: "form-control" %>
+        </div>
+        <div class="col-6 col-md-4 col-lg-3 my-2 purchase-align-button-transaktion-new">
+          <%= form.submit "Realizar Traspaso", class: "btn btn-primary mt-4" %>
+        </div>
+        <div class="col-6 col-md-4 col-lg-3 my-2 purchase-align-button-transaktion-new">
+          <%= link_to 'Cancelar', pos_session_path(@pos_session),
+            class: "btn btn-outline-primary mt-4", data: { turbo_frame: "_top" }  %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

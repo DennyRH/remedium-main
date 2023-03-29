@@ -1,0 +1,46 @@
+<section class="app-papper row justify-content-between" data-controller="transaktions">
+  <div class="col-12">
+    <h5 class="mb-4">
+      <%= @pos_session.user.full_name %>
+      (<%= @pos_session.user.role.name_es || @pos_session.user.role.name %>)
+      <%= @pos_session.created_at.localtime.strftime("%d-%m-%Y") %>
+    </h5>
+  </div>
+  <div class="col-6 mb-4">
+    <%= form_with url: search_transaktions_pos_session_transaktions_path(@pos_session),
+        method: :post, class: "purchase-search-products-form",
+        data: { transaktions_target: "formSearchTransaktions" } do |form|
+    %>
+      <%= form.hidden_field :pos_session_context, value: @pos_session.id,
+          data: { transaktions_target: "posSessionContextTransaktion" } %>
+      <%= form.label "Buscar Transacción" %>
+      <%=
+        form.search_field :search_transaktions, id: "search-input",
+          class: "form-control purchase-search-input",
+          data: {
+            action: "input->transaktions#searchTransaktions",
+            transaktions_target: "inputSearchTransaktions"
+          }
+      %>
+    <% end %>
+  </div>
+  <div class="col-6 col-md-4 col-lg-3">
+    <%= form_with url: pos_session_transaktions_path(@pos_session),
+        method: :get, class: "purchase-search-products-form",
+        data: { transaktions_target: "formSearchTransaktionsFilter" } do |form|
+    %>
+      <%= form.label "Filtrar por:" %>
+      <%=
+        form.select :type_filter,  options_for_select(@filter_transaktions, params[:type_filter]),
+          { include_blank: 'Seleccionar' },
+          class: "form-control purchase-search-input",
+          data: { action: "change->transaktions#sendRequestTransaktionFilter" }
+      %>
+    <% end %>
+  </div>
+  <div id="transaktions_movements_search" class="table-responsive col-12">
+    <%= render partial: 'shared/tables/table_transaktion',
+      locals: { transaktions: @transaktions } %>
+    <%= render partial: 'shared/pagination', locals: { records_pagination: @transaktions } %>
+  </div>
+</section>

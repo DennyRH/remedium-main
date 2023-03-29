@@ -1,0 +1,27 @@
+.app__breadcrumbs_style {
+  font-weight: 400;
+  font-size: 1rem;
+  padding-top: 0.7rem;
+  margin-bottom: 0.7rem;
+}
+
+.app__breadcrumbs_style i {
+  color: rgb(126, 126, 126);
+}
+
+.app__breadcrumbs_style p {
+  display: inline-block;
+  margin: 0;
+}
+
+.app__breadcrumbs_style a {
+  text-decoration: none;
+  font-weight: 400;
+  color: rgb(126, 126, 126);
+  transition: 0.2s;
+}
+
+.app__breadcrumbs_style a:hover {
+  color: black;
+  transition: 0.2s;
+}

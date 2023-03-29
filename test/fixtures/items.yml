@@ -1,0 +1,35 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  warehouse: one
+  quantity: MyString
+  product: one
+  total_stock: 1
+  min_stock: 1
+  max_stock: 1
+  sale_price: 1
+  purchase_price: 1
+  category: MyString
+  unit: MyString
+  sub_category: MyString
+  code: MyString
+  description: MyString
+  expiration_date: 2023-01-26
+  date_of_elaboration: 2023-01-26
+
+two:
+  warehouse: two
+  quantity: MyString
+  product: two
+  total_stock: 1
+  min_stock: 1
+  max_stock: 1
+  sale_price: 1
+  purchase_price: 1
+  category: MyString
+  unit: MyString
+  sub_category: MyString
+  code: MyString
+  description: MyString
+  expiration_date: 2023-01-26
+  date_of_elaboration: 2023-01-26

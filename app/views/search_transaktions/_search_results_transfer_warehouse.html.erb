@@ -1,0 +1,9 @@
+<% warehouses.each do |obj| %>
+    <p
+      class="search-results-sales border-bottom"
+      data-action="click->transfer#selectWarehouse"
+      value="<%= { warehouse: obj, warehouse_detail: obj.warehouse_detail }.to_json %>"
+    >
+      <%= obj.name %> <%= obj.warehouse_detail.address %>
+    </p>
+<% end %>

@@ -1,0 +1,11 @@
+<%= turbo_frame_tag "modal_create_product" do %>
+  <div id="myModal2" class="modal2">
+    <div class="modal-content2">
+      <h2>Ingreso de Inventario</h2>
+      <div class="my-4">
+        <%= render "shared/forms/form_create_product",
+            locals: { product: @product, pos_session: @pos_session } %>
+      </div>
+    </div>
+  </div>
+<% end %>

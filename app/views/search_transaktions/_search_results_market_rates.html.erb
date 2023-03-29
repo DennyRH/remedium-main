@@ -1,0 +1,27 @@
+<% products.each do |obj| %>
+  <% available = obj.total_stock > 0 && obj.warehouse_id == @pos_session.warehouse_id ? "true" : "false" %>
+  <% warehouse = "#{obj.warehouse.name} #{obj.warehouse.warehouse_detail.address}" %>
+  <p
+    class="search-results-sales border-bottom"
+    data-action="click->market#selectProduct<%= "InOtherWarehouse" if available == "false" %>"
+    value="<%=
+      {
+        item: obj, product: obj.product, warehouse: warehouse, available: available
+      }.to_json
+    %>"
+  >
+    <%= obj.warehouse_id == @pos_session.warehouse_id ? "" : warehouse %>
+    <%= obj.product.description %>
+    (<%= obj.total_stock %> unidades)
+    <span class="search-results-symbol <%=
+        if obj.total_stock <= obj.min_stock && obj.total_stock > 0
+          "minimum-stock"
+        elsif obj.total_stock > obj.min_stock
+          "available-stock"
+        elsif obj.total_stock <= 0
+          "without-stock"
+        end
+      %>"
+    ></span>
+  </p>
+<% end %>

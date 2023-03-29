@@ -1,0 +1,33 @@
+<section class="app-papper row justify-content-between" data-controller="item">
+  <div class="col-6 col-md-5 mb-4">
+    <%= form_with url: search_items_warehouse_items_path(@warehouse),
+        method: :post, class: "purchase-search-products-form",
+        data: { item_target: "formSearchItems" } do |form|
+    %>
+      <%= form.label "Buscar Items" %>
+      <%=
+        form.search_field :search_items, id: "search-input",
+          class: "form-control purchase-search-input",
+          data: {
+            action: "input->item#searchItems",
+            item_target: "inputSearchItems"
+          }, autofocus: true
+      %>
+    <% end %>
+  </div>
+  <% if policy(Item).new? %>
+    <div class="col-6">
+      <div class="d-flex justify-content-between">
+        <%= link_to "Ajuste de inventario", new_warehouse_item_path(@warehouse),
+            class: "btn btn-primary mt-4" %>
+        <%= link_to "Exportar inventario", root_path,
+            class: "btn btn-outline-primary mt-4" %>
+      </div>
+    </div>
+  <% end %>
+  <div class="col-12" id="search_results_items_index">
+    <%= render partial: 'shared/tables/table_item',
+        locals: { items: @items, warehouse: @warehouse} %>
+    <%= render partial: 'shared/pagination', locals: { records_pagination: @items } %>
+  </div>
+</section>

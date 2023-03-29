@@ -1,0 +1,184 @@
+<section class="row justify-content-center app-papper" data-controller="arching">
+  <div class="col-12 col-md-6 pos-session-info">
+    <h5><span>Usuario: </span>
+      <%= @pos_session.user.name %> <%= @pos_session.user.last_name %>
+      (<%= @pos_session.user.role.name_es || @pos_session.user.role.name %>)
+    </h5>
+    <h5><span>Sucursal:</span> <%= @pos_session.warehouse.name %></h5>
+    <h5>
+      <span>Caja Chica: </span>
+      <%= @pos_session.petty_cash %>
+      <%= @pos_session.type_of_currency %>
+    </h5>
+    <h5><span>Observación:</span> <%= @pos_session.observation %></h5>
+    <h5><span>Estado de la Caja:</span> <%= @pos_session.status %></h5>
+    <h5>
+      <span>Inicio de Caja: </span>
+      <%= @pos_session.created_at.localtime.strftime("%Y-%m-%d %H:%M") %>
+    </h5>
+    <% if @pos_session.created_at == @pos_session.updated_at %>
+        <h5>
+          <span>Cierre de Caja: </span>
+          Hasta el momento
+        </h5>
+    <% else %>
+        <h5>
+          <span>Cierre de Caja: </span>
+          <%= @pos_session.updated_at.localtime.strftime("%Y-%m-%d %H:%M") %>
+        </h5>
+    <% end %>
+  </div>
+  <div class="col-12 col-md-6 pos-session-info">
+    <% if current_user.owner_or_admin? %>
+      <h5>
+        <span>Total billetaje: </span>
+        <%= @pos_session.total_balance ?
+            "#{@pos_session.total_balance} #{@pos_session.type_of_currency}": "" %>
+      </h5>
+      <h5>
+        <span>Total Ingresos: </span>
+        <%= @pos_session.total_income ?
+            "#{@pos_session.total_income} #{@pos_session.type_of_currency}" : "" %>
+      </h5>
+      <h5>
+        <span>Total Egresos: </span>
+        <%= @pos_session.total_expenses ?
+            "#{@pos_session.total_expenses} #{@pos_session.type_of_currency}" : "" %>
+      </h5>
+      <h5>
+        <span>Dinero Sobrante: </span>
+        <%= @pos_session.remaining_money ?
+            "#{@pos_session.remaining_money} #{@pos_session.type_of_currency}" : "" %>
+      </h5>
+      <h5>
+        <span>Total en Caja: </span>
+        <%= @pos_session.total_session ?
+            "#{@pos_session.total_session} #{@pos_session.type_of_currency}" : "" %>
+      </h5>
+      <h5>
+        <span>Dinero Faltante: </span>
+        <%= @pos_session.missing_money ?
+            "#{@pos_session.missing_money} #{@pos_session.type_of_currency}" : "" %>
+      </h5>
+      <h5>
+        <span>Egresos Anulados: </span>
+        <%= "#{@expenses_annullated} #{@pos_session.type_of_currency}" %>
+      </h5>
+      <h5>
+        <span>Ingresos Anulados: </span>
+        <%= "#{@income_annullated} #{@pos_session.type_of_currency}" %>
+      </h5>
+    <% end %>
+  </div>
+  <div class="col-12 col-md-6 pos-session-info info-arching-close-selector d-none">
+    <% if @total_payment_methods && current_user.owner_or_admin? %>
+      <% @total_payment_methods["total_arching_money"].deep_symbolize_keys.each do |key, value| %>
+        <h5>
+          <span><%= value[:title] %>: </span>
+          <span class="mx-2 h6">
+            Cantidad: <%= value[:cash_qty] %>,
+          </span>
+          <span class="h6">
+            Total: <%= value[:total] %>
+          </span>
+        </h5>
+      <% end %>
+    <% end %>
+  </div>
+  <div class="col-12 col-md-6 pos-session-info info-arching-close-selector d-none">
+    <% if @total_payment_methods && current_user.owner_or_admin? %>
+      <h5>
+        <span>Total Ingresos Efectivo: </span>
+        <%= @total_payment_methods["income"]["cash"]["total"] %>
+        <%= @pos_session.type_of_currency %>
+      </h5>
+      <h5>
+        <span>Total Egresos Efectivo: </span>
+        <%= @total_payment_methods["expenses"]["cash"]["total"] %>
+        <%= @pos_session.type_of_currency %>
+      </h5>
+      <h5>
+        <span>Total Ingresos QR: </span>
+        <%= @total_payment_methods["income"]["qr"]["total"] %>
+        <%= @pos_session.type_of_currency %>
+      </h5>
+      <h5>
+        <span>Total Egresos QR: </span>
+        <%= @total_payment_methods["expenses"]["qr"]["total"] %>
+        <%= @pos_session.type_of_currency %>
+      </h5>
+      <h5>
+        <span>Total Ingresos Tarjeta: </span>
+        <%= @total_payment_methods["income"]["card"]["total"] %>
+        <%= @pos_session.type_of_currency %>
+      </h5>
+      <h5>
+        <span>Total Egresos Tarjeta: </span>
+        <%= @total_payment_methods["expenses"]["card"]["total"] %>
+        <%= @pos_session.type_of_currency %>
+      </h5>
+      <h5>
+        <span>Total Ingresos Transferencia: </span>
+        <%= @total_payment_methods["income"]["transfer"]["total"] %>
+        <%= @pos_session.type_of_currency %>
+      </h5>
+      <h5>
+        <span>Total Egresos Transferencia: </span>
+        <%= @total_payment_methods["expenses"]["transfer"]["total"] %>
+        <%= @pos_session.type_of_currency %>
+      </h5>
+    <% end %>
+  </div>
+  <div class="col-12">
+    <% if @pos_session.status == 'closed' %>
+      <button
+        type="button"
+        data-action="click->arching#toggleShowArchingDetails"
+        class="btn btn-outline-primary mt-3"
+      >
+        Detalles del arqueo
+      </button>
+    <% end %>
+    <% if @pos_session.status == 'active' %>
+      <% if policy(@pos_session).edit? %>
+        <%= link_to "Realizar Arqueo", edit_pos_session_path(@pos_session),
+          class: "btn btn-outline-primary mx-1 mt-3" %>
+      <% end %>
+      <% if policy(@pos_session).sales? %>
+        <%= link_to "Vender", pos_session_sales_path(@pos_session),
+          class: "btn btn-primary mx-1 mt-3" %>
+      <% end %>
+      <% if policy(@pos_session).purchases? %>
+        <%= link_to "Comprar", pos_session_purchases_path(@pos_session),
+          class: "btn btn-outline-primary mx-1 mt-3" %>
+      <% end %>
+      <% if policy(@pos_session).market_rates? %>
+        <%= link_to "Cotizar", pos_session_market_rates_path(@pos_session),
+            class: "btn btn-outline-primary mx-1 mt-3" %>
+      <% end %>
+      <% if policy(@pos_session).item_transfer? %>
+        <%= link_to "Traspaso", pos_session_item_transfer_path(@pos_session),
+            class: "btn btn-outline-primary mx-1 mt-3" %>
+      <% end %>
+      <% if current_user.owner_or_admin_or_sales? %>
+        <%=
+          link_to "Confirmar Traspaso", pos_session_modal_confirm_transfer_path(@pos_session),
+            class: "btn btn-outline-primary mx-1 mt-3",
+            data: { turbo_frame: "modal_confirm_transfer" }
+        %>
+      <% end %>
+    <% end %>
+    <% if policy(Transaktion).index? %>
+      <%= link_to "Movimientos", pos_session_transaktions_path(@pos_session),
+        class: "btn btn-outline-primary mx-1 mt-3" %>
+    <% end %>
+  </div>
+</section>
+<section class="row app-papper mt-4">
+  <div class="col-12" data-controller="transaktions">
+    <h4 class="text-center mb-5"><b>Ventas</b></p>
+    <%= render partial: 'shared/tables/table_transaktion',
+        locals: { transaktions: @sale_transaktions, sales: true } %>
+    <%= render partial: 'shared/pagination', locals: { records_pagination: @sale_transaktions } %>
+  </div>
+</section>

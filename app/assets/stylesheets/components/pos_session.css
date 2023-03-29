@@ -1,0 +1,21 @@
+.pos-session-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.arching-edit-money-img {
+  width: 100%;
+  height: 7rem;
+  object-fit: contain;
+  border-radius: 0.3rem;
+}
+
+.arching-edit-money-input {
+  width: 100%;
+}
+
+.pos-session-validating-missing-money-img {
+  width: 100%;
+  height: 100%;
+}

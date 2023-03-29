@@ -1,0 +1,62 @@
+<div id="paying_transaktion" class="my-2" data-controller="pending">
+  <%=
+    bootstrap_form_with model: transaktion, url: pos_session_transaktion_path(pos_session.id, transaktion.id),
+              method: :put, class: "purchase-search-products-form" do |form|
+  %>
+    <div class="row">
+      <div class="col-6 col-md-4">
+        <%= form.label t('forms.models.transaktion.labels.total') %>
+        <%=
+          form.hidden_field :total, value: transaktion.total,
+            class: "form-control",
+            data: { pending_target: "totalPendingPayment" }
+        %>
+        <p class="fw-bold h5 mt-2">
+          <%= transaktion.total %> <%= pos_session.type_of_currency %>
+        </p>
+      </div>
+      <div class="col-6 col-md-4">
+        <%= form.text_field :description, class: "form-control", label: t('forms.models.transaktion.labels.description') %>
+      </div>
+      <div class="col-6 col-md-4">
+        <%=
+          form.number_field :money_paid, step: '0.01',
+            class: "form-control",
+            data: {
+              pending_target: "moneyPaidPendingPayment",
+              action: "input->pending#setMoneyReceived"
+            }, label: t('forms.models.transaktion.labels.money_paid')
+        %>
+      </div>
+      <div class="col-6 col-md-4">
+        <%= form.label t('forms.models.transaktion.labels.money_received') %>
+        <%= form.hidden_field :money_received, step: '0.01',
+            data: { pending_target: "moneyReceivedPending" },
+            class: "form-control"
+        %>
+        <div>
+          <p class="mt-2 d-inline-block" data-pending-target="moneyReceivedPendingSee">
+            0
+          </p>
+          <p class="mt-2 d-inline-block" data-pending-target="moneyReceivedPendingSee">
+            <%= pos_session.type_of_currency %>
+          </p>
+        </div>
+      </div>
+      <div class="col-6 col-md-4">
+        <%= form.select :payment_method, options_for_select(payment_methods, 'Efectivo'), label: t('forms.models.transaktion.labels.payment_method'),
+            class: "form-control" %>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3">
+        <%= form.collection_select :receiver_pos_session_id, open_sessions, :id, :session_responsible, include_blank: "Elegir caja", label: t('forms.models.transaktion.labels.receiver_pos_session_id')  %>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3 my-2">
+        <%= form.submit "Realizar Pago", class: "btn btn-primary mt-3" %>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3 my-2">
+        <%= link_to "Cancelar", pos_session_transaktion_path(pos_session.id, transaktion.id),
+              class: "btn btn-outline-primary mt-3", data: { turbo_frame: "_top" } %>
+      </div>
+    </div>
+  <% end %>
+</div>

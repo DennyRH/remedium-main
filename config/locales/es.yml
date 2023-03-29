@@ -1,0 +1,88 @@
+es:
+  forms:
+    models:
+      account:
+        labels:
+          name: Nombre de Empresa
+          phone: Número de Empresa
+          email: Email
+          nit: NIT
+          digital_certificate: Certificado Digital
+          private_key: Clave Privada
+          municipality: Municipio
+          sector_type_document: Tipo de documento Sector
+          address: Dirección
+          invoice_type: Tipo de Factura
+          bussiness_type: Tipo de Negocio
+          type_of_taxpayer: Tipo de Contribuyente
+          economic_activity: Actividad Económica
+          social_reason: Razón Social
+      pos_session:
+        labels:
+          petty_cash: Caja Chica
+          observation: Observación
+          type_of_currency: Tipo de Moneda
+          status: Estado
+          total_balance: "Total Arqueo: "
+          initial_balance: Total Inicial
+          missing_money: Dinero Faltante
+          remaining_money: Dinero Sobrante
+          total_income: Total Ingresos
+          total_expenses: Total Egresos
+          total_session: Total en Caja
+          warehouse_select: Seleccionar Sucursal
+      transaktion:
+        labels:
+          type_transaktion: Tipo de Transacción
+          total: Total
+          description: Observación
+          money_paid: Dinero Pagado
+          money_received: Dinero Recibido
+          money_returned: Dinero Devuelto
+          payment_method: Metodos de Pago
+          discount: Descuento
+          code: Código
+          destination_warehouse_id: Sucursal Destino
+          date_of_payment: Fecha a pagar
+          status: Estado
+          invoice_number: Número de Factura
+          receipt_number: Número de Recibo
+          receiver_pos_session_id: Caja que pagará la compra
+      customer:
+        labels:
+          nit: NIT
+          social_reason: Razón Social
+          email: Email
+          status: Estado
+        type:
+          buyer: Cliente
+          provider: Proveedor
+    orders:
+      filter_warehouse: Sucursal
+      filter_provider: Filtrar por proveedor
+  customer:
+    kind:
+      create:
+        provider: Crear Proveedor
+        buyer: Crear Cliente
+      edit:
+        provider: Editar Proveedor
+        buyer: Editar Cliente
+      search:
+        provider: Buscar Proveedor
+        buyer: Buscar Cliente
+  activerecord:
+    attributes:
+      buyer:
+        phone: Teléfono
+        document_number: CI/NIT
+        name: Nombre o razón social
+      provider:
+        phone: Teléfono
+        document_number: NIT
+        name: Razón social
+  payment:
+    pending: 
+      title: Pagos pendientes
+    completed:
+      title: Pagos completados

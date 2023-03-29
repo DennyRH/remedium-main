@@ -1,0 +1,159 @@
+<section class="purchases-container" data-controller="transfer">
+  <div class="app-papper justify-content-center">
+    <div class="purchase-search-products row justify-content-between">
+      <div class="col-6 col-md-4">
+        <%= form_with url: search_sale_pos_session_transaktions_path(@pos_session),
+                      method: :post, class: "purchase-search-products-form",
+                      data: { transfer_target: "formSearch" } do |form|
+        %>
+          <%= form.hidden_field :transfer, value: "true" %>
+          <%= form.hidden_field :search_in_warehouse_the_session, value: "true" %>
+          <%= form.label :buscar_producto %>
+          <%=
+            form.search_field :search_product, id: "search-input",
+              class: "form-control purchase-search-input",
+              data: {
+                action: "input->transfer#searchProduct",
+                transfer_target: "inputSearchProduct"
+              }
+          %>
+        <% end %>
+      </div>
+      <div
+        data-transfer-target="searchResults"
+        class="col-12 search_results"
+        id="search_results_transfer"
+      >
+      </div>
+    </div>
+    <div class="table-responsive my-4">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th scope="col" class="min-width-4">Descripción</th>
+            <th scope="col">Unidades Caja</th>
+            <th scope="col">Precio Unitario</th>
+            <th scope="col">Precio Caja</th>
+            <th scope="col">Total Stock</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td data-transfer-target="productDescription" class="min-width-4" scope="row"></td>
+            <td data-transfer-target="unitPackage"></td>
+            <td data-transfer-target="priceUnit"></td>
+            <td data-transfer-target="pricePackage"></td>
+            <td data-transfer-target="totalStock"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="purchase-item-transactions-form mt-4">
+      <%= form_with url: item_transactions_pos_session_transaktions_path(@pos_session),
+          data: { transfer_target: "formAddItemTransaktionTransfer" },
+          method: :post do |form| %>
+        <input type="hidden" data-transfer-target="subtotalProduct">
+        <input type="hidden" data-transfer-target="qtyPerPackage">
+        <%= form.hidden_field :item_transfer, value: 'true' %>
+        <%= form.hidden_field :qty_unit, data: { transfer_target: "qtyUnitSale" },
+            class: "form-control purchase-item-transactions-input" %>
+        <%= form.hidden_field :item_id, data: { transfer_target: "itemId" },
+            class: "form-control purchase-item-transactions-input" %>
+        <div class="row">
+          <div class="col-6 col-lg-3">
+            <%= form.label "Unidades" %>
+            <%=
+              form.number_field :unit_total,
+                class: "form-control purchase-item-transactions-input",
+                data: {
+                  action: "input->transfer#sumSubtotalForUnits",
+                  transfer_target: "unitTotalSale"
+                }
+            %>
+          </div>
+          <div class="col-6 col-lg-4 col-xl-3">
+            <%= form.label "Cantidad Paq./Caja" %>
+            <%=
+              form.number_field :qty_package,
+                class: "form-control purchase-item-transactions-input",
+                data: {
+                  action: "input->transfer#sumSubtotalForPackage",
+                  transfer_target: "qtyPackageSale"
+                }
+            %>
+          </div>
+          <div class="col-6 col-lg-3">
+            <%= form.label :subtotal %>
+            <%= form.hidden_field :sub_total, step: '0.01',
+                class: "form-control", data: { transfer_target: "subtotal" } %>
+            <div>
+              <p class="fw-bold h5 mt-2 d-inline-block" data-transfer-target="subtotalSee">
+                0
+              </p>
+              <p class="fw-bold h5 mt-2 d-inline-block">
+                <%= @pos_session.type_of_currency %>
+              </p>
+            </div>
+          </div>
+          <div class="col-6 col-lg-2">
+            <button
+              type="button" data-action="click->transfer#addItemTransaktionAndReset"
+              class="btn btn-outline-primary sale-align-button-item-transaktions-add"
+            >
+              Agregar
+            </button>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <div class="app-papper my-3" id="item_transactions_transfer">
+    <%= render partial: "shared/tables/table_items_added_transfer",
+        locals: { item_transactions: session[:item_transactions_transfer] } %>
+  </div>
+  <div class="app-papper my-3">
+    <div class="mb-3 row container-search-warehouse-destination">
+      <div class="col-12 col-lg-6 col-xl-5">
+        <%=
+          form_with url: search_warehouse_pos_session_transaktions_path(@pos_session),
+                    method: :post, class: "purchase-search-products-form",
+                    data: { transfer_target: "formSearchWarehouse" } do |form|
+        %>
+          <%= form.label "Buscar Sucursal destino" %>
+          <%=
+            form.search_field :search_warehouse, id: "search-input",
+              class: "form-control purchase-search-input",
+              data: {
+                action: "input->transfer#searchWarehouse",
+                transfer_target: "inputSearchWarehouse"
+              }
+          %>
+        <% end %>
+        <div
+          data-transfer-target="searchResultsWarehouseTransfer"
+          class="search_results"
+          id="search_results_transfer_warehouse"
+        >
+        </div>
+      </div>
+    </div>
+    <%= form_with url: create_transfer_pos_session_transaktions_path(@pos_session),
+                  method: :post, class: "purchase-search-products-form" do |form|
+    %>
+      <%= form.hidden_field :type_transaktion, value: "Transfer" %>
+      <%= form.hidden_field :status, value: "sent" %>
+      <%= form.hidden_field :warehouse_id, data: { transfer_target: "warehouseIdTransfer" } %>
+      <%= form.hidden_field :total, step: '0.01', data: { transfer_target: "totalTransfer" } %>
+      <div class="row">
+        <div class="col-6 col-md-4 my-2">
+          <%= form.label "Observación" %>
+          <%= form.text_field :description, class: "form-control" %>
+        </div>
+        <div class="col-6 col-md-4 mt-2 purchase-align-button-transaktion-new">
+          <p></p>
+          <%= form.submit "Realizar Traspaso", class: "btn btn-primary btn-lg" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</section>

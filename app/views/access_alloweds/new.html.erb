@@ -1,0 +1,16 @@
+<section
+  class="row justify-content-center align-items-center account-show-edit-container"
+  data-controller="search"
+>
+  <div class="app-papper account-show-edit-form col-12 col-sm-10 col-md-6 col-lg-5 my-3">
+    <div>
+      <%= bootstrap_form_for([@users_admin, @access_allowed], url: users_admin_access_alloweds_path) do |f| %>
+        <%= render partial: 'shared/forms/errors', locals: { object: @access_allowed } %>
+        <%= f.select :warehouse_id,  options_for_select(@warehouses),
+          { include_blank: 'Seleccionar' },
+          class: "form-control purchase-search-input" %>
+        <%= f.submit "Asignar Sucursal", class: "btn btn-primary" %>
+      <% end %>
+    </div>
+  </div>
+</section>
