@@ -72,5 +72,4 @@ config/database.yml# See https://help.github.com/articles/ignoring-files for mor
 
 /node_modules
 .DS_Store
-
 .DS_Store

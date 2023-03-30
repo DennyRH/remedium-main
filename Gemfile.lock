@@ -277,7 +277,7 @@ DEPENDENCIES
   jbuilder
   jsbundling-rails
   kaminari
-  mysql2 (~> 0.5)
+  mysql2
   pry-byebug
   puma (~> 5.0)
   pundit
