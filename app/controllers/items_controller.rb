@@ -12,7 +12,7 @@ class ItemsController < ApplicationController
     respond_to do |format|
       format.html
       format.pdf do
-        render pdf: "Reporte de Inventario",
+        render pdf: "items",
               template: "items/index",
               formats: [:html],
               orientation: 'Landscape'   # Excluding ".pdf" extension.
