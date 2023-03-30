@@ -53,10 +53,10 @@ test:
 # for a full overview on how database connection configuration can be specified.
 #
 #production:
-#  <<: *default
-#  database: remedium_production
-#  username: remedium
-#  password: <%= ENV["REMEDIUM_DATABASE_PASSWORD"] %>
+# <<: *default
+# database: remedium_production
+# username: remedium
+# password: <%= ENV["REMEDIUM_DATABASE_PASSWORD"] %>
 
 production:
  <<: *default
