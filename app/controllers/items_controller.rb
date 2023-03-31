@@ -15,8 +15,9 @@ class ItemsController < ApplicationController
         render pdf: "items",
           template: "items/index",
           formats: [:html],
-          orientation: 'Landscape',
-          enable_local_file_access: true# Excluding ".pdf" extension.
+          orientation: "Landscape",
+          enable_local_file_access: true
+            # Excluding ".pdf" extension.
       end
     end
   end
