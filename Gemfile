@@ -49,7 +49,7 @@ gem "rails-i18n"
 gem 'wicked_pdf'
 
 # work with wicked_pdf
-gem 'wkhtmltopdf-binary'
+gem 'wkhtmltopdf-binary', "~> 0.12.4.0"
 
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
