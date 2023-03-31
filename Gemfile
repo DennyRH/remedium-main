@@ -51,9 +51,6 @@ gem 'wicked_pdf'
 # work with wicked_pdf
 gem 'wkhtmltopdf-binary'
 
-# may be need for wkhtmltopdf
-gem 'libjpeg-ruby', '~> 0.10.0'
-
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
 

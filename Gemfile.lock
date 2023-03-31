@@ -133,7 +133,6 @@ GEM
       activerecord
       kaminari-core (= 1.2.2)
     kaminari-core (1.2.2)
-    libjpeg-ruby (0.10.0)
     loofah (2.19.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -281,7 +280,6 @@ DEPENDENCIES
   jbuilder
   jsbundling-rails
   kaminari
-  libjpeg-ruby (~> 0.10.0)
   mysql2 (~> 0.5)
   pry-byebug
   puma (~> 5.0)
