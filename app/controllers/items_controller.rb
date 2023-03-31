@@ -8,14 +8,14 @@ class ItemsController < ApplicationController
       warehouse_id: params[:warehouse_id], status: 0
     ).page(params[:page]).per(15).order(id: :desc)
     authorize @items
-    Mime::Type.register "application/pdf", :pdf
     respond_to do |format|
       format.html
       format.pdf do
         render pdf: "items",
-              template: "items/index",
-              formats: [:html],
-              orientation: 'Landscape'   # Excluding ".pdf" extension.
+          template: "items/index",
+          formats: [:html],
+          orientation: 'Landscape',
+          enable_local_file_access: true# Excluding ".pdf" extension.
       end
     end
   end
