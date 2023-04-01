@@ -309,3 +309,35 @@ Devise.setup do |config|
   # changed. Defaults to true, so a user is signed in automatically after changing a password.
   # config.sign_in_after_change_password = true
 end
+
+# you should probably put this somewhere in lib/ ;-)
+class MyFailureApp < Devise::FailureApp
+  def respond
+    # let's say we want to handle that pdf request nicely
+    if request.format == :pdf
+      pdf_redirect
+    else
+      super
+    end
+  end
+
+  protected
+
+  # Assuming you have new_user_session_path in your routes
+  # Devise is doing much much more magic, see `scope_url`
+  # for more insight!
+  def pdf_redirect
+    # after signing-in we want to redirect user back to requested pdf file
+    session["#{scope}_return_to"] = attempted_path if request.get?
+
+    # nothing fancy here, i18n_message & scope are provided by parent class
+    redirect_to :"new_#{scope}_session", format: :html, alert: i18n_message
+  end
+end
+
+Devise.setup do |config|
+  # ...
+  config.warden do |manager|
+    manager.failure_app = MyFailureApp
+  end
+end
