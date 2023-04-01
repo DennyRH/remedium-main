@@ -12,11 +12,12 @@ class ItemsController < ApplicationController
     respond_to do |format|
       format.html
       format.pdf do
-        render pdf: "items",
-          template: "items/index",
+        render pdf: 'items',
+          template: 'items/index',
           formats: [:html],
-          orientation: "Landscape",
+          orientation: 'Landscape',
           enable_local_file_access: true
+
             # Excluding ".pdf" extension.
       end
     end
