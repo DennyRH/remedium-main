@@ -9,7 +9,8 @@
 # https://github.com/mileszs/wicked_pdf/blob/master/README.md
 path = `which wkhtmltopdf`.gsub(/\n/, "")
 WickedPdf.config = {
-  exe_path: path ,
+  #exe_path: path ,
+  exe_path: "#{ENV['GEM_HOME']}/gems/wkhtmltopdf-binary-#{Gem.loaded_specs['wkhtmltopdf-binary'].version}/bin/wkhtmltopdf_linux_amd64",
   enable_local_file_access: true
 
   # Path to the wkhtmltopdf executable: This usually isn't needed if using
