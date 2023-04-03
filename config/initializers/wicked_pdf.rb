@@ -7,9 +7,9 @@
 # To learn more, check out the README:
 #
 # https://github.com/mileszs/wicked_pdf/blob/master/README.md
-
+path = `which wkhtmltopdf`.gsub(/\n/, "")
 WickedPdf.config = {
-  exe_path: (Rails.env.development? ? "/home/denny/.rbenv/shims/wkhtmltopdf" : "/bin/wkhtmltopdf"),
+  exe_path: path ,
   enable_local_file_access: true
 
   # Path to the wkhtmltopdf executable: This usually isn't needed if using
