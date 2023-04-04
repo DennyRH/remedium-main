@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get "download_pdf/:warehouse_id", to: "items#download_pdf", as: "download_pdf"
+  get "preview_pdf/:warehouse_id", to: "items#preview_pdf", as: "preview_pdf"
   devise_for :users, controllers: { registrations: 'users/registrations' }
   root to: 'pages#home'
   resources :users_admin, controller: 'users' do
@@ -42,9 +44,9 @@ Rails.application.routes.draw do
     get '/modal_confirm_market_rates', to: 'search_transaktions#modal_confirm_market_rates'
     get '/modal_confirm_transfer', to: 'search_transaktions#modal_confirm_transfer'
   end
-  
+
   get '/payment_center', to: 'transaktions#payment_center'
-  
+
   resources :providers do
     collection do
       get '/modal_new', to: 'providers#modal_new'

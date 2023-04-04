@@ -20,7 +20,9 @@
       <div class="d-flex justify-content-between">
         <%= link_to "Ajuste de inventario", new_warehouse_item_path(@warehouse),
             class: "btn btn-primary mt-4" %>
-        <%= link_to "Exportar inventario", root_path,
+        <%= link_to "Exportar en pdf", download_pdf_path(@warehouse.id, format: :pdf),
+            class: "btn btn-outline-primary mt-4" %>
+        <%= link_to "Vista en pdf", preview_pdf_path(@warehouse.id, format: :pdf),
             class: "btn btn-outline-primary mt-4" %>
       </div>
     </div>

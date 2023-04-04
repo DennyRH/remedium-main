@@ -45,4 +45,13 @@ class WarehousePolicy < ApplicationPolicy
   def search_items?
     @user.owner_or_admin?
   end
+
+  def download_pdf?
+    @user.owner_or_admin_or_sales?
+  end
+
+  def preview_pdf?
+    @user.owner_or_admin_or_sales?
+  end
+
 end
