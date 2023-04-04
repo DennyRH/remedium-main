@@ -8,17 +8,35 @@ class ItemsController < ApplicationController
       warehouse_id: params[:warehouse_id], status: 0
     ).page(params[:page]).per(15).order(id: :desc)
     authorize @items
-    Mime::Type.register "application/pdf", :pdf
-    respond_to do |format|
-      format.html
-      format.pdf do
-        render pdf: 'items',
-          template: 'items/index',
-          formats: [:html],
-          orientation: 'Landscape',
-          enable_local_file_access: true
+  end
 
-            # Excluding ".pdf" extension.
+  def download_pdf
+    @items = policy_scope(Item).where(
+      warehouse_id: params[:warehouse_id], status: 0
+    ).page(params[:page]).per(15).order(id: :desc)
+    authorize @items
+    respond_to do |format|
+      format.pdf do
+        pdf = Prawn::Document.new
+        pdf.text "Descargas funciona!"
+        send_data(pdf.render, filename: "Inventario.pdf",
+                                  type: "application/pdf",)
+      end
+    end
+  end
+
+  def preview_pdf
+    @items = policy_scope(Item).where(
+      warehouse_id: params[:warehouse_id], status: 0
+    ).page(params[:page]).per(15).order(id: :desc)
+    authorize @items
+    respond_to do |format|
+      format.pdf do
+        pdf = Prawn::Document.new
+        pdf.text "funciona"
+        send_data(pdf.render, filename: "Inventario.pdf",
+                                  type: "application/pdf",
+                           disposition: "inline")
       end
     end
   end

@@ -45,11 +45,8 @@ gem "breadcrumbs_on_rails"
 # traduction
 gem "rails-i18n"
 
-# wicked_pdf generate pdf from html
-gem 'wicked_pdf'
-
-# work with wicked_pdf
-gem 'wkhtmltopdf-binary', "~> 0.12.6.1"
+# prawn pdf generator
+gem 'prawn', '~> 2.1'
 
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
