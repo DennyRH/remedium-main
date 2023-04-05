@@ -48,6 +48,9 @@ gem "rails-i18n"
 # prawn pdf generator
 gem 'prawn', '~> 2.1'
 
+# for tables on prawn
+gem 'prawn-table', '~> 0.1.0'
+
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
 
