@@ -2,43 +2,73 @@ class ItemsController < ApplicationController
   before_action :set_warehouse
   before_action :set_item, only: %i[show edit update destroy set_breadcrumbs_customers]
   before_action :set_breadcrumbs_customers, only: %i[index new edit show]
+  require 'prawn/table'
+  require 'prawn'
 
   def index
-    @items = policy_scope(Item).where(
-      warehouse_id: params[:warehouse_id], status: 0
-    ).page(params[:page]).per(15).order(id: :desc)
-    authorize @items
+    index_action
   end
 
   def download_pdf
-    @items = policy_scope(Item).where(
-      warehouse_id: params[:warehouse_id], status: 0
-    ).page(params[:page]).per(15).order(id: :desc)
-    authorize @items
-    respond_to do |format|
-      format.pdf do
-        pdf = Prawn::Document.new
-        pdf.text "Descargas funciona!"
-        send_data(pdf.render, filename: "Inventario.pdf",
-                                  type: "application/pdf",)
-      end
+    @items = index_action
+
+    data = data_table
+
+    pdf = Prawn::Document.new(page_layout: :landscape)
+
+    # Define el estilo de la tabla
+    pdf.font_size 8
+    pdf.font "Helvetica"
+
+    pdf.text "Control inventario Sucursal"
+
+    # Crea la tabla
+    pdf.table data do |t|
+      # Define el estilo de las celdas de la primera fila (los encabezados de la tabla)
+      t.header = true
+      t.row(0).font_style = :bold
+      t.row(0).background_color = "DDDDDD"
+
+      # Define el estilo de las celdas de las filas de datos
+      t.rows(1..-1).background_color = "FFFFFF"
+
+      # Define el ancho de cada columna de la tabla
+      t.column_widths = {0 => 70, 1 => 100, 2 => 250, 3 => 50, 4 => 50, 5 => 50, 6 => 50, 7 => 50, 8 => 50}
     end
+
+    pdf.render_file "tabla.pdf"
+    send_data(pdf.render, type: "application/pdf", disposition: "attatchment")
   end
 
   def preview_pdf
-    @items = policy_scope(Item).where(
-      warehouse_id: params[:warehouse_id], status: 0
-    ).page(params[:page]).per(15).order(id: :desc)
-    authorize @items
-    respond_to do |format|
-      format.pdf do
-        pdf = Prawn::Document.new
-        pdf.text "funciona"
-        send_data(pdf.render, filename: "Inventario.pdf",
-                                  type: "application/pdf",
-                           disposition: "inline")
-      end
+    @items = index_action
+
+    data = data_table
+
+    pdf = Prawn::Document.new(page_layout: :landscape)
+
+    # Define el estilo de la tabla
+    pdf.font_size 8
+    pdf.font "Helvetica"
+
+    pdf.text "Control inventario Sucursal"
+
+    # Crea la tabla
+    pdf.table data do |t|
+      # Define el estilo de las celdas de la primera fila (los encabezados de la tabla)
+      t.header = true
+      t.row(0).font_style = :bold
+      t.row(0).background_color = "DDDDDD"
+
+      # Define el estilo de las celdas de las filas de datos
+      t.rows(1..-1).background_color = "FFFFFF"
+
+      # Define el ancho de cada columna de la tabla
+      t.column_widths = {0 => 70, 1 => 100, 2 => 250, 3 => 50, 4 => 50, 5 => 50, 6 => 50, 7 => 50, 8 => 50}
     end
+
+    pdf.render_file "tabla.pdf"
+    send_data(pdf.render, type: "application/pdf", disposition: "inline")
   end
 
   def search_items
@@ -126,6 +156,40 @@ class ItemsController < ApplicationController
         )
       end
     end
+  end
+
+  def index_action
+    @items = policy_scope(Item).where(
+      warehouse_id: params[:warehouse_id], status: 0
+    ).page(params[:page]).per(15).order(id: :desc)
+    authorize @items
+  end
+
+  def data_table
+    @items = index_action
+    data =["Código", "Nombre Genérico", "Descripción", "Costo lista", "P.Venta Paq./Caja", "P.Venta Unidad",
+      "Total Stock", "Total Paq.", "Min. Stock" ],
+    *@items.map { |p| [ p.product&.code, p.product&.generic_name, p.product&.description, p.list_price,
+                      p.sale_price_package, p.sale_price_unit, p.total_stock, p.quantity, p.min_stock,]}
+    return data
+  end
+
+  def generate_pdf
+    data = data_table
+
+    pdf = Prawn::Document.new(page_layout: :landscape)
+    pdf.font_size 8
+    pdf.font "Helvetica"
+    pdf.text "Control inventario Sucursal"
+    pdf.table data do |t|
+      t.header = true
+      t.row(0).font_style = :bold
+      t.row(0).background_color = "DDDDDD"
+      t.rows(1..-1).background_color = "FFFFFF"
+      t.column_widths = {0 => 70, 1 => 100, 2 => 250, 3 => 50, 4 => 50, 5 => 50, 6 => 50, 7 => 50, 8 => 50}
+    end
+
+    return pdf.render_file "tabla.pdf"
   end
 
   private
