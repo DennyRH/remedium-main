@@ -6,70 +6,12 @@ class ItemsController < ApplicationController
   require 'prawn'
 
   def index
-    index_action
+    @items = policy_scope(Item).where(
+      warehouse_id: params[:warehouse_id], status: 0
+    ).page(params[:page]).per(15).order(id: :desc)
+    authorize @items
   end
 
-  def download_pdf
-    @items = index_action
-
-    data = data_table
-
-    pdf = Prawn::Document.new(page_layout: :landscape)
-
-    # Define el estilo de la tabla
-    pdf.font_size 8
-    pdf.font "Helvetica"
-
-    pdf.text "Control inventario Sucursal"
-
-    # Crea la tabla
-    pdf.table data do |t|
-      # Define el estilo de las celdas de la primera fila (los encabezados de la tabla)
-      t.header = true
-      t.row(0).font_style = :bold
-      t.row(0).background_color = "DDDDDD"
-
-      # Define el estilo de las celdas de las filas de datos
-      t.rows(1..-1).background_color = "FFFFFF"
-
-      # Define el ancho de cada columna de la tabla
-      t.column_widths = {0 => 70, 1 => 100, 2 => 250, 3 => 50, 4 => 50, 5 => 50, 6 => 50, 7 => 50, 8 => 50}
-    end
-
-    pdf.render_file "tabla.pdf"
-    send_data(pdf.render, type: "application/pdf", disposition: "attatchment")
-  end
-
-  def preview_pdf
-    @items = index_action
-
-    data = data_table
-
-    pdf = Prawn::Document.new(page_layout: :landscape)
-
-    # Define el estilo de la tabla
-    pdf.font_size 8
-    pdf.font "Helvetica"
-
-    pdf.text "Control inventario Sucursal"
-
-    # Crea la tabla
-    pdf.table data do |t|
-      # Define el estilo de las celdas de la primera fila (los encabezados de la tabla)
-      t.header = true
-      t.row(0).font_style = :bold
-      t.row(0).background_color = "DDDDDD"
-
-      # Define el estilo de las celdas de las filas de datos
-      t.rows(1..-1).background_color = "FFFFFF"
-
-      # Define el ancho de cada columna de la tabla
-      t.column_widths = {0 => 70, 1 => 100, 2 => 250, 3 => 50, 4 => 50, 5 => 50, 6 => 50, 7 => 50, 8 => 50}
-    end
-
-    pdf.render_file "tabla.pdf"
-    send_data(pdf.render, type: "application/pdf", disposition: "inline")
-  end
 
   def search_items
     @items = search_items_filter
@@ -158,38 +100,111 @@ class ItemsController < ApplicationController
     end
   end
 
+  def download_pdf
+    @items = index_action
+
+    data = data_table
+    fecha_hora = Time.now.strftime("%d/%m/%Y  %H:%M:%S")
+    texto_encabezado = "Inventario Fisico: #{@warehouse.name}"
+    pdf = Prawn::Document.new(page_layout: :portrait)
+
+    # Define el estilo de la tabla
+    pdf.font_size 8
+    pdf.font "Helvetica"
+
+    pdf.text_box texto_encabezado, at: [0, pdf.cursor], size: 16, align: :left, leading: 15
+    pdf.text_box fecha_hora, at: [pdf.bounds.width - 150, pdf.cursor], size: 12, align: :right, leading: 15
+    pdf.move_down 20
+    # Crea la tabla
+    pdf.table data, cell_style: { border_width: 0, border_style: :solid }, row_colors: ["FFFFFF", "EEEEEE"]  do |t|
+      # Define el estilo de las celdas de la primera fila (los encabezados de la tabla)
+      t.header = true
+      t.row(0).font_style = :bold
+      t.row(0).background_color = "DDDDDD"
+      t.column_widths = {0 => 68, 1 => 97, 2 => 240, 3 => 45, 4 => 45, 5 => 45}
+    end
+
+    opciones_paginas = {
+      at: [pdf.bounds.right - 50, 0],
+      width: 50,
+      align: :right,
+      start_count_at: 1,
+      size: 12
+    }
+    pdf.number_pages "<page>/<total>", opciones_paginas
+
+    pdf.render_file "tabla.pdf"
+    send_data(pdf.render, type: "application/pdf", disposition: "attatchment")
+  end
+
+  def preview_pdf
+    @items = index_action
+    data = data_table
+
+    fecha_hora = Time.now.strftime("%d/%m/%Y %H:%M:%S")
+    texto_encabezado = "Inventario Fisico: #{@warehouse.name}"
+
+    pdf = Prawn::Document.new(page_layout: :portrait, page_size: "A4", margin: [20, 10] )
+    pdf.font_size 8
+    pdf.font "Helvetica"
+
+    pdf.text_box texto_encabezado, at: [0, pdf.bounds.height], size: 16, align: :left, leading: 15
+    pdf.text_box fecha_hora, at: [pdf.bounds.width - 150, pdf.bounds.height], size: 12, align: :right, leading: 15
+    pdf.move_down(30)
+
+    pdf.table data, cell_style: { border_width: 0, border_style: :solid}, row_colors: ["FFFFFF", "EEEEEE"] do |t|
+      t.header = true
+      t.row(0).font_style = :bold
+      t.row(0).background_color = "DDDDDD"
+      t.column_widths = {0 => 50, 1 => 68, 2 => 97, 3 => 225, 4 => 45, 5 => 45, 6 => 45}
+    end
+
+    opciones_footer = {
+      at: [pdf.bounds.right - 50, 15],
+      width: 50,
+      align: :right,
+      start_count_at: 1,
+      size: 12
+    }
+
+
+    pdf.repeat :all do
+      pdf.text_box texto_encabezado, at: [pdf.bounds.left, pdf.bounds.bottom + 15], size: 12
+      pdf.text_box fecha_hora, at: [pdf.bounds.left, pdf.bounds.bottom + 15], width: pdf.bounds.width, align: :center, size: 12
+    end
+    pdf.number_pages "pag. <page>/<total>" , opciones_footer
+
+    pdf.render_file "tabla.pdf"
+    send_data(pdf.render, type: "application/pdf", disposition: "inline")
+  end
+
   def index_action
-    @items = policy_scope(Item).where(
-      warehouse_id: params[:warehouse_id], status: 0
-    ).page(params[:page]).per(15).order(id: :desc)
+    @items = policy_scope(Item).where(warehouse_id: params[:warehouse_id], status: 0)
     authorize @items
+  end
+
+  def get_valid_code(code, import_id, alternative_code)
+    [code, import_id, alternative_code].find { |c| c.present? && c != 0 } || 0
   end
 
   def data_table
     @items = index_action
-    data =["Código", "Nombre Genérico", "Descripción", "Costo lista", "P.Venta Paq./Caja", "P.Venta Unidad",
-      "Total Stock", "Total Paq.", "Min. Stock" ],
-    *@items.map { |p| [ p.product&.code, p.product&.generic_name, p.product&.description, p.list_price,
-                      p.sale_price_package, p.sale_price_unit, p.total_stock, p.quantity, p.min_stock,]}
-    return data
-  end
-
-  def generate_pdf
-    data = data_table
-
-    pdf = Prawn::Document.new(page_layout: :landscape)
-    pdf.font_size 8
-    pdf.font "Helvetica"
-    pdf.text "Control inventario Sucursal"
-    pdf.table data do |t|
-      t.header = true
-      t.row(0).font_style = :bold
-      t.row(0).background_color = "DDDDDD"
-      t.rows(1..-1).background_color = "FFFFFF"
-      t.column_widths = {0 => 70, 1 => 100, 2 => 250, 3 => 50, 4 => 50, 5 => 50, 6 => 50, 7 => 50, 8 => 50}
+    grouped_items = @items.group_by { |item| item.product&.customer&.name }
+    @sorted_items = []
+    @sorted_items << ["Proveedor", "Código", "Nombre Genérico", "Descripción",  "Total Stock", "Total Paq.", "Min. Stock" ]
+    grouped_items.keys.sort.each do |key|
+      items = grouped_items[key]
+      items.each do |item|
+        @sorted_items << [item.product&.customer&.name, get_valid_code(item.product&.code, item.product&.import_id, item.product&.alternative_code),
+          item.product&.generic_name, item.product&.description, item.total_stock, item.quantity, item.min_stock]
+      end
     end
 
-    return pdf.render_file "tabla.pdf"
+    return data = @sorted_items
+  end
+
+  def new_data
+
   end
 
   private
